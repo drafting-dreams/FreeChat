@@ -1,0 +1,25 @@
+# Logs
+logs
+*.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# IDEA/Webstorm project files
+.idea
+*.iml
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+
+#dist folder
+dist
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+src/static
