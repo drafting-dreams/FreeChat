@@ -51,6 +51,14 @@ textarea
   background-color: transparent
   -webkit-appearance: textarea
 
+pre
+  display: block
+  margin: 0
+  font-family: inherit
+  font-size: inherit
+  white-space: pre-wrap
+  word-break: normal
+
 .main
   height: 80%
   min-height: 600px
@@ -76,6 +84,20 @@ textarea
   overflow: hidden
 
 #chatArea
+
+.scrollWrapper>.scrollContent
+  border: none!important
+  box-sizing: content-box!important
+  height: auto
+  left: 0
+  margin: 0
+  max-height: none!important
+  max-width: none!important
+  overflow: scroll!important
+  padding: 0
+  position: relative!important
+  top: 0
+  width: auto!important
 
 .box
   position: relative
@@ -165,7 +187,9 @@ a .btn
   padding-left: 30px
   padding-right: 30px
   &:hover
-    background-color: #eeeeee
+    background-color: #d6d6d6
+  &:active
+    background-color: #fff
 
 .languageBtn
   display: inline-block
@@ -180,3 +204,74 @@ a .btn
 .selected
   background-color: #aaaaaa
   color: #222222
+
+.clearFix
+  position: relative
+  &:after
+    content: ""
+    visibility: hidden
+    display: block
+    height: 0
+    clear: both
+
+.message.me
+  float: right
+  text-align: right
+  clear: right
+  .avatar
+    float: right
+
+.message.friend
+  float: left
+  text-align: left
+  clear: left
+  .avatar
+    float: left
+
+.message
+  margin-bottom: 16px
+  float: left
+  width: 100%
+
+.avatar
+  width: 40px
+  height: 40px
+  border-radius: 2px
+
+.bubble.bubblePrimary.right
+  border-radius: 20px 3px 10px 20px
+
+.bubble.bubblePrimary.left
+  border-radius: 3px 20px 20px 10px
+
+.bubble.bubblePrimary
+  background-color: #4de2d0
+
+
+.bubble
+  max-width: 500px
+  min-height: 1em
+  display: inline-block
+  vertical-align: top
+  position: relative
+  text-align: left
+  font-size: 14px
+  border-radius: 3px
+  -moz-border-radius: 3px
+  -webkit-border-radius: 3px
+  margin: 0 10px
+
+.plain
+  padding: 9px 13px
+
+.bubbleCont
+  word-wrap: break-word
+  word-break: break-all
+
+.icoLoading
+  position: absolute
+  right: 100%
+  top: 50%
+  margin-top: -7px
+  margin-right: 13px
+  vertical-align: middle
