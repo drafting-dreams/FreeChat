@@ -4,14 +4,25 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
-import configureStore, {history} from './store/configureStore';
+import store, {history} from './store/configureStore';
 import './style/styles.sass'
 import {receiveAMessage} from "./actions/messageActions";
 import Root from './components/Root';
+import socket from './socket/socket';
 require('./favicon.ico'); // Tell webpack to load favicon.ico
-const store = configureStore();
+
 //mock receiving
-store.dispatch(receiveAMessage());
+//store.dispatch(receiveAMessage());
+//Establish websocket
+// const websocket = new WebSocket("ws://localhost:1337");
+// websocket.addEventListener("message", function(event) {
+//   store.dispatch(receiveAMessage(event.data));
+// })
+//
+// websocket.addEventListener('open', function (event) {
+//   websocket.send('Fuck Server');
+// });
+
 
 render(
 <AppContainer>

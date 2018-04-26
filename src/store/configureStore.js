@@ -40,4 +40,4 @@ function configureStoreDev(initialState) {
   return store;
 }
 
-export default configureStoreDev;
+export default configureStoreDev();

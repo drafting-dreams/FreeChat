@@ -1,5 +1,5 @@
 import * as types from '../constants/actionTypes';
-import messageApi from '../api/mockMessageApi';
+import messageApi from '../api/messageApi';
 
 export function sendSuccess(message) {
   return {type: types.SEND_SUCCESS, message}
@@ -17,9 +17,9 @@ export function sendAMessage(message) {
   };
 }
 
-export function receiveAMessage() {
+export function receiveAMessage(message) {
   return function(dispatch) {
-    return messageApi.listening().then(message => {
+    return messageApi.listening(message).then(message => {
       dispatch(receiveSuccess(message));
     }).catch(err => {throw err})
   };
