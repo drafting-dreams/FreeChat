@@ -2,6 +2,7 @@ const WebSocketServer = require('websocket').server;
 const http = require('http');
 const webSocketsServerPort = 1337;
 const clients = [];
+const indices = [];
 /* eslint-disable no-console */
 const server = http.createServer(function (request, response) {
   // process HTTP request. Since we're writing just WebSockets
@@ -26,7 +27,8 @@ wsServer.on('request', function (request) {
   // all messages from users here.
   const connection = request.accept(null, request.origin);
   // we need to know client index to remove them on 'close' event
-  const index = clients.push(connection) - 1;
+  let index = clients.push(connection) - 1;
+  indices.push(index);
   console.log((new Date()) + ' Connection accepted.');
 
   // user sent some message
@@ -45,18 +47,26 @@ wsServer.on('request', function (request) {
   // });
 
   connection.on('close', function (connection) {
+    //If the prev windows closes before those backward windows, the index is wrong now
+    //So we need to get the real index for now
+    const currentIndex = indices.findIndex((value) => { return value === index; });
+
     console.log((new Date()) +
       + connection.remoteAddress + " disconnected.");
     // close user connection
-    clients.splice(index, 1);
+    clients.splice(currentIndex, 1);
+    indices.splice(currentIndex, 1);
   });
 
+  // user sent some message
   connection.on('message', function(message) {
+    const currentIndex = indices.findIndex((value) => { return value === index; });
     if(message.type === 'utf8') {
       const data = message.utf8Data;
+      //broadcast message to all connected clients
       // for(let i=0; i<clients.length; i++)
       //   clients[i].send(data);
-      clients.filter((value, ind) => ind !== index).forEach((client) => {client.send(data);});
+      clients.filter((value, ind) => ind !== currentIndex).forEach((client) => {client.send(data);});
     }
   });
 

@@ -6,7 +6,7 @@ import {render} from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
 import store, {history} from './store/configureStore';
 import './style/styles.sass'
-import {receiveAMessage} from "./actions/messageActions";
+//import {receiveAMessage} from "./actions/messageActions";
 import Root from './components/Root';
 import socket from './socket/socket';
 require('./favicon.ico'); // Tell webpack to load favicon.ico

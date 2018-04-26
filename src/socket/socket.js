@@ -4,7 +4,8 @@ import store from '../store/configureStore';
 
 export default (function establishSocket() {
   const websocket = new WebSocket("ws://localhost:1337");
-  websocket.addEventListener("message", function(event) {
+  //const websocket = new WebSocket("ws://localhost:8080/websocket");
+  websocket.addEventListener("message", function (event) {
     store.dispatch(receiveAMessage(event.data));
   })
 
