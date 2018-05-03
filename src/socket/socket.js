@@ -9,7 +9,7 @@ export default (function establishSocket() {
     store.dispatch(receiveAMessage(event.data));
   })
 
-  websocket.addEventListener('open', function (event) {
+  websocket.addEventListener('open', function () {
     //websocket.send('A');
     console.log('client open');
   });

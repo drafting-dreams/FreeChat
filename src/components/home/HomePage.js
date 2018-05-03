@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as messageActions from '../../actions/messageActions';
+import * as languageActions from '../../actions/languageActions';
 import Dialogue from './MessageList';
 
 class HomePage extends React.Component {
@@ -10,8 +11,7 @@ class HomePage extends React.Component {
     super(props, context);
     this.state = {
       message: '',
-      sending: false,
-      language:'zh'
+      sending: false
     };
 
     this.sendMessage = this.sendMessage.bind(this);
@@ -46,15 +46,15 @@ class HomePage extends React.Component {
   }
 
   switchLanguage() {
-    this.state.language === 'zh' ? (
-      this.setState({language: 'en'})
-    ) : (
-      this.setState({language: 'zh'})
-    );
+    if(this.props.language === 'zh') {
+      this.props.actions.switchLanguage('en');
+    } else {
+      this.props.actions.switchLanguage('zh');
+    }
   }
 
   render() {
-    const languageSelector = this.state.language === 'zh' ? (
+    const languageSelector = this.props.language === 'zh' ? (
       <div className="toolBar">
         <div role="button" className="btn languageBtn selected">中</div>
         <div role="button" className="btn languageBtn" onClick={this.switchLanguage}>英</div>
@@ -107,19 +107,19 @@ class HomePage extends React.Component {
 }
 
 HomePage.propTypes = {
-  messages: PropTypes.array,
+  language: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    messages: state.messages
+    language: state.language
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(messageActions, dispatch)
+    actions: bindActionCreators(Object.assign({}, languageActions, messageActions), dispatch)
   };
 }
 

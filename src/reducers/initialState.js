@@ -1,3 +1,4 @@
 export default {
-  messages: [{sender: 'friend', content: 'mock receive'}]
+  messages: [{sender: 'friend', content: 'mock receive'}],
+  language: 'zh'
 };
