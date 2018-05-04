@@ -5,19 +5,31 @@ import {connect} from 'react-redux';
 import * as messageActions from '../../actions/messageActions';
 import * as languageActions from '../../actions/languageActions';
 import Dialogue from './MessageList';
+import LanguageBox from './LanguageBox';
 
 class HomePage extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
       message: '',
-      sending: false
+      sending: false,
+      showLanguagePanel: false,
+      language: props.language.language,
+      messageLength: props.messageListLength,
     };
 
     this.sendMessage = this.sendMessage.bind(this);
     this.editMessage = this.editMessage.bind(this);
-    this.switchLanguage = this.switchLanguage.bind(this);
     this.checkEnter = this.checkEnter.bind(this);
+    this.removeLanguagePanel = this.removeLanguagePanel.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('willreceive', nextProps);
+    if(nextProps.language.language !== this.state.language)
+      this.setState({language: nextProps.language.language});
+    if(nextProps.messageListLength > this.state.messageLength)
+      this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
   }
 
   checkEnter(e) {
@@ -32,10 +44,17 @@ class HomePage extends React.Component {
   }
 
   sendMessage() {
+    if(!this.state.message.trim())
+      return;
     this.setState({sending: true});
     this.props.actions.sendAMessage({sender: 'me', content: this.state.message})
-      .then(() => {this.setState({sending: false});})
-      .catch((err) => {this.setState({sending: false});console.log(err);});
+      .then(() => {
+        this.setState({message:'', sending: false});
+        })
+      .catch((err) => {
+        this.setState({message:'', sending: false});
+        console.log(err);
+        });
     this.textarea.value = '';
   }
 
@@ -45,26 +64,14 @@ class HomePage extends React.Component {
     });
   }
 
-  switchLanguage() {
-    if(this.props.language === 'zh') {
-      this.props.actions.switchLanguage('en');
-    } else {
-      this.props.actions.switchLanguage('zh');
-    }
+  removeLanguagePanel() {
+    this.setState({showLanguagePanel: false})
   }
 
   render() {
-    const languageSelector = this.props.language === 'zh' ? (
-      <div className="toolBar">
-        <div role="button" className="btn languageBtn selected">中</div>
-        <div role="button" className="btn languageBtn" onClick={this.switchLanguage}>英</div>
-      </div>
-    ) : (
-      <div className="toolBar">
-        <div role="button" className="btn languageBtn" onClick={this.switchLanguage}>中</div>
-        <div role="button" className="btn languageBtn selected">英</div>
-      </div>
-    );
+    const languageList = this.props.language.languages;
+    const languageLabel = languageList.find(value =>
+      value.code === this.state.language).language
     return (
       <div className="main">
         <div className="mainInner">
@@ -75,12 +82,23 @@ class HomePage extends React.Component {
               </div>
               <div className="scrollWrapper boxBd" style={{"position": "absolute"}}>
                 <div className="boxBd scrollbarDynamic scrollContent"
-                     style={{marginBottom: "0", marginRight: "0", height: "421px"}}>
+                     style={{marginBottom: "0", marginRight: "0", height: "421px"}}
+                ref={(div) => {this.scrollableDiv = div}}>
                   <Dialogue newMessage={this.state.message} sending={this.state.sending}/>
                 </div>
               </div>
               <div className="boxFt">
-                {languageSelector}
+                <div className="toolBar">
+                  <div role="button" className="btn languageBtn" onClick={() =>
+                  {this.setState({showLanguagePanel: true})}}>{languageLabel}</div>
+                  {this.state.showLanguagePanel ? (
+                  <div>
+                    <div className="clickBoard" onClick={this.removeLanguagePanel}/>
+                    <div className="boxDecorator arrowShadow"/>
+                    <div className="boxDecorator arrow"/>
+                    <LanguageBox removeLanguagePanel={this.removeLanguagePanel}/>
+                  </div>) : null}
+                </div>
                 <div className="content">
                   <form>
                     <textarea autoComplete="off"
@@ -107,13 +125,17 @@ class HomePage extends React.Component {
 }
 
 HomePage.propTypes = {
-  language: PropTypes.string.isRequired,
-  actions: PropTypes.object.isRequired
+  language: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+  messages: PropTypes.array.isRequired,
+  messageListLength: PropTypes.number.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    language: state.language
+    language: state.language,
+    messages: state.messages,
+    messageListLength: state.scrollBar,
   };
 }
 

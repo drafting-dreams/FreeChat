@@ -59,6 +59,14 @@ pre
   white-space: pre-wrap
   word-break: normal
 
+.clickBoard
+  z-index: 10
+  position: fixed
+  left: 0
+  right: 0
+  top: 0
+  bottom: 0
+
 .main
   height: 80%
   min-height: 600px
@@ -186,20 +194,24 @@ a .btn
   color: #222
   padding-left: 30px
   padding-right: 30px
+  transition: background .8s
   &:hover
-    background-color: #d6d6d6
+    background: #d6d6d6 radial-gradient(circle, transparent 1%, #d6d6d6 1%) center/15000%
   &:active
     background-color: #fff
+    background-size: 100%
+    transition: background 0s
 
 .languageBtn
   display: inline-block
-  width: 30px
+  width: auto
   height: 30px
   padding: 2px 5px
   border-radius: 2px
   margin-left: -1px
   color: #868686
   font-size: 16px
+  margin-left: 11px
 
 .selected
   background-color: #aaaaaa
@@ -275,3 +287,5 @@ a .btn
   margin-top: -7px
   margin-right: 13px
   vertical-align: middle
+
+@import 'languages'

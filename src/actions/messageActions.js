@@ -9,6 +9,8 @@ export function receiveSuccess(message) {
   return {type: types.RECEIVE_SUCCESS, message}
 }
 
+
+
 export function sendAMessage(message) {
   return function(dispatch) {
     return messageApi.sendMessage(message).then(message => {

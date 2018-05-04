@@ -1,14 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {bindActionCreators} from "redux";
+import * as scrollActions from '../../actions/scrollActions';
 
 class MessageList extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  //componentDidUpdate message length management
+  componentDidUpdate() {
+    if(this.props.messages.length > this.props.messageListLength)
+      this.props.actions.lenMessageList(this.props.messages.length)
+  }
+
   render() {
-    console.log(this.props.messages);
     return (
       <div>
         {this.props.messages.map(message =>
@@ -62,13 +69,22 @@ MessageList.propTypes = {
   messages: PropTypes.array,
   sending: PropTypes.bool.isRequired,
   newMessage: PropTypes.string,
+  messageListLength: PropTypes.number.isRequired,
+  actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    messages: state.messages
+    messages: state.messages,
+    messageListLength: state.scrollBar,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(scrollActions, dispatch)
   };
 }
 
 
-export default connect(mapStateToProps)(MessageList);
+export default connect(mapStateToProps, mapDispatchToProps)(MessageList);
