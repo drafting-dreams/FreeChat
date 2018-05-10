@@ -6,6 +6,7 @@ import * as messageActions from '../../actions/messageActions';
 import * as languageActions from '../../actions/languageActions';
 import Dialogue from './MessageList';
 import LanguageBox from './LanguageBox';
+import Panel from './Panel';
 
 class HomePage extends React.Component {
   constructor(props, context) {
@@ -25,12 +26,12 @@ class HomePage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('willreceive', nextProps);
     if(nextProps.language.language !== this.state.language)
       this.setState({language: nextProps.language.language});
     if(nextProps.messageListLength > this.state.messageLength)
       this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
   }
+
 
   checkEnter(e) {
     if(e.ctrlKey && e.key === 'Enter') {
@@ -47,7 +48,7 @@ class HomePage extends React.Component {
     if(!this.state.message.trim())
       return;
     this.setState({sending: true});
-    this.props.actions.sendAMessage({sender: 'me', content: this.state.message})
+    this.props.actions.sendAMessage({sender: this.props.userInfo.id, content: this.state.message})
       .then(() => {
         this.setState({message:'', sending: false});
         })
@@ -75,7 +76,8 @@ class HomePage extends React.Component {
     return (
       <div className="main">
         <div className="mainInner">
-          <div style={{"height": "100%"}}>
+          <div className="fuckingInner" style={{"height": "100%"}}>
+            <Panel/>
             <div id="chatArea" className="box chat">
               <div className="boxHead">
                 <div className="titleWrapper">Chat without obstacle !!!</div>
@@ -100,7 +102,7 @@ class HomePage extends React.Component {
                   </div>) : null}
                 </div>
                 <div className="content">
-                  <form>
+                  <form style={{padding: 0}}>
                     <textarea autoComplete="off"
                               autoFocus="off"
                               id="textArea"
@@ -129,13 +131,15 @@ HomePage.propTypes = {
   actions: PropTypes.object.isRequired,
   messages: PropTypes.array.isRequired,
   messageListLength: PropTypes.number.isRequired,
+  userInfo: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     language: state.language,
     messages: state.messages,
     messageListLength: state.scrollBar,
+    userInfo: state.user,
   };
 }
 

@@ -1,5 +1,5 @@
 export default {
-  messages: [{sender: 'friend', content: 'mock receive'}],
+  messages: [],
   language: 'zh',
   languages: [
     {code:'zh', language:'中文'},
@@ -32,4 +32,5 @@ export default {
     {code:'vie', language:'Người việt nam'}
   ],
   messageListLength: 1,
+  user: {},
 };

@@ -11,7 +11,7 @@ class MessageApi {
       //   resolve(message);
       // }, delay);
       try{
-        socket.send(message.content);
+        socket.send(JSON.stringify(message));
         resolve(message);
       } catch(err) {
         reject(err);
@@ -31,7 +31,7 @@ class MessageApi {
       // })
       if(!message)
         reject("Can't receive nothing.");
-      resolve({sender: 'friend', content: message});
+      resolve(message);
     });
   }
 }

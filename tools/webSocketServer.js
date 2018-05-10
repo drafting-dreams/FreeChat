@@ -58,13 +58,14 @@ wsServer.on('request', function (request) {
         //No language info, do nothing
       }
       console.log(message);
-      const data = message.utf8Data;
+      const data = JSON.parse(message.utf8Data);
       //broadcast message to all connected clients
       clients.filter(value => value!==client).forEach(value => {
         if(client.language !== value.language)
-          translate(data, client.language, value.language).then(translated => {value.connection.send(translated)});
+          translate(data.content, client.language, value.language).then(translated =>
+          {value.connection.send(JSON.stringify({sender: data.sender, content: translated}))});
         else
-          value.connection.send(data);
+          value.connection.send(message.utf8Data);
         //value.connection.send(translatedMessage);
       });
     }

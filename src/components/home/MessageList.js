@@ -16,16 +16,18 @@ class MessageList extends React.Component {
   }
 
   render() {
+    console.log("messagelist", this.props.messages);
+    const user = this.props.userInfo;
     return (
       <div>
         {this.props.messages.map(message =>
           <div>
             <div className="clearFix">
               <div>
-                <div className={"message " + message.sender}>
+                <div className={"message " + (message.sender===user.id ? 'me' : 'friend')}>
                   <img className="avatar" src={"../../static/" + message.sender + ".jpeg"}/>
                   <div className="content">
-                    <div className={"bubble bubblePrimary " + (message.sender==='me' ? 'right' : 'left')}>
+                    <div className={"bubble bubblePrimary " + (message.sender===user.id ? 'right' : 'left')}>
                       <div className="bubbleCont">
                         <div className="plain">
                           <pre>{message.content}</pre>
@@ -43,7 +45,7 @@ class MessageList extends React.Component {
             <div className="clearFix">
               <div>
                 <div className="message me">
-                  <img className="avatar" src="../../static/me.jpeg"/>
+                  <img className="avatar" src={"../../static/" + user.id + ".jpeg"}/>
                   <div className="content">
                     <div className="bubble bubblePrimary right">
                       <div className="bubbleCont">
@@ -77,6 +79,7 @@ function mapStateToProps(state) {
   return {
     messages: state.messages,
     messageListLength: state.scrollBar,
+    userInfo: state.user,
   };
 }
 

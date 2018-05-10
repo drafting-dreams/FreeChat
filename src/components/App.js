@@ -10,6 +10,7 @@ class App extends React.Component {
       <Switch>
         <Route exact path="/" component={SignPage} />
         <Route path="/login" component={SignPage} />
+        <Route path="/home/:id" component={HomePage} />
         <Route component={NotFoundPage}/>
       </Switch>
     );
