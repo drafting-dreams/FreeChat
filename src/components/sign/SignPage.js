@@ -28,11 +28,15 @@ class SignPage extends React.Component {
     //window.location.href = "http://localhost:3000/home";
     this.setState({signingIn: true});
 
-    this.props.actions.signIn(this.state.user).
-      then(() => {this.redirect();}).
-      catch(err => {console.log(err);this.setState({signingIn: false,
-    user: {id: '用户名或密码错误', pwd: ''}
-    });});
+    this.props.actions.signIn(this.state.user).then(() => {
+      this.redirect();
+    }).catch(err => {
+      console.log(err);
+      this.setState({
+        signingIn: false,
+        user: {id: '用户名或密码错误', pwd: ''}
+      });
+    });
   }
 
   redirect() {
@@ -57,8 +61,10 @@ class SignPage extends React.Component {
         <div className="signContainer">
           <h1 className="signTitle">FreeChat</h1>
           <form className="form">
-            <input type="text" name="id" onChange={this.updateUserInfo} value={this.state.user.id} placeholder="UserID" />
-            <input type="password" name="pwd" onChange={this.updateUserInfo} value={this.state.user.pwd} placeholder="Password" />
+            <input type="text" name="id" onChange={this.updateUserInfo} value={this.state.user.id}
+                   placeholder="UserID"/>
+            <input type="password" name="pwd" onChange={this.updateUserInfo} value={this.state.user.pwd}
+                   placeholder="Password"/>
             <button type="submit" id="loginButton" onClick={this.signIn}>Login</button>
           </form>
         </div>
@@ -85,15 +91,15 @@ SignPage.propTypes = {
 };
 
 function mapStateToProps(state) {
-    return {
-        userInfo: state.user
-    };
+  return {
+    userInfo: state.user
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators(Object.assign({push}, signActions), dispatch)
-    };
+  return {
+    actions: bindActionCreators(Object.assign({push}, signActions), dispatch)
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignPage);

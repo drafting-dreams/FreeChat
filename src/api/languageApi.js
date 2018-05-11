@@ -5,8 +5,8 @@ class MessageApi {
     return new Promise((resolve, reject) => {
       try {
         const lang = JSON.stringify({type: 'language', language: language});
-        console.log(lang);
-        socket.send(lang);
+        const sock = socket();
+        sock.send(lang);
         resolve(language);
       } catch(err) {
         reject(err);

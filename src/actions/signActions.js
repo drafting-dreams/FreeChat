@@ -7,7 +7,6 @@ export function signInSuccess(message) {
 
 export function signIn(user) {
   return function(dispatch) {
-    console.log('in signAction diaoyong userapizhong')
     return userApi.signIn(user).then(message => {
       dispatch(signInSuccess(message));
     }).catch(err => {throw err})

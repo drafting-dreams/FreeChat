@@ -53,10 +53,8 @@ export default class UserAPI {
             return {id: ID, name: name};
           });
           user = {id: user.id, name: user.name, friends: friendsWithName};
-          console.log('find', user);
           resolve(user);
         } else {
-          console.log("didn't find")
           reject("用户名或密码不正确");
         }
       }, delay);

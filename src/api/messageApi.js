@@ -11,7 +11,8 @@ class MessageApi {
       //   resolve(message);
       // }, delay);
       try{
-        socket.send(JSON.stringify(message));
+        const sock = socket();
+        sock.send(JSON.stringify(message));
         resolve(message);
       } catch(err) {
         reject(err);

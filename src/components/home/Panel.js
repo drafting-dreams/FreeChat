@@ -3,10 +3,25 @@ import PropTypes from 'prop-types';
 //import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import '../../style/panel.sass';
+import socket from '../../socket/socket';
 
 class Panel extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    this.sock = socket();
+
+    this.state = {
+      selected: ''
+    };
+
+    this.selectFriend = this.selectFriend.bind(this);
+  }
+
+  selectFriend(id) {
+    this.sock.send(JSON.stringify({type: 'otherId', otherId: id}));
+    this.setState({selected: id});
+    this.props.changeParentChattingWith(id);
   }
 
   render() {
@@ -27,7 +42,8 @@ class Panel extends React.Component {
         <div className="scrollWrapper" style={{position: "relative", height: "100%"}}>
           <div className="scrollContent" style={{height: "100%"}}>
             {user.friends.map(friend => (
-              <div className="chatItem">
+              <div className={"chatItem" + (this.state.selected === friend.id ? " active" : "")}
+                   onClick={() => {this.selectFriend(friend.id)}}>
                 <div className="avatar">
                   <img src={"../../static/" + friend.id + ".jpeg"}/>
                 </div>
@@ -46,6 +62,7 @@ class Panel extends React.Component {
 
 Panel.propTypes = {
   userInfo: PropTypes.object.isRequired,
+  changeParentChattingWith: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

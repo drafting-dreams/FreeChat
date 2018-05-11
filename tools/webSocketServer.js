@@ -28,7 +28,7 @@ wsServer.on('request', function (request) {
   // This is the most important callback for us, we'll handle
   // all messages from users here.
   const connection = request.accept(null, request.origin);
-  const client = {connection: connection, language: 'zh'};
+  const client = {connection: connection, language: 'zh', id: '', otherId: ''};
   clients.push(client);
   // we need to know client index to remove them on 'close' event
   console.log((new Date()) + ' Connection accepted.');
@@ -38,36 +38,52 @@ wsServer.on('request', function (request) {
     //So we need to get the real index for now
 
     console.log((new Date()) +
-      + connection.remoteAddress + " disconnected.");
+      +connection.remoteAddress + " disconnected.");
     // close user connection
-    clients = clients.filter(value => value!==client)
+    clients = clients.filter(value => value !== client)
   });
 
   // user sent some message
-  connection.on('message', function(message) {
+  connection.on('message', function (message) {
     //const currentIndex = indices.findIndex((value) => { return value === index; });
-    if(message.type === 'utf8') {
-      try {
-        const languageObj = JSON.parse(message.utf8Data);
-        if(languageObj.type !== 'language' || !languageObj.language)
-          throw Error('Not language json!');
-        const index = clients.findIndex((value) => client===value);
-        clients[index].language = languageObj.language;
+    if (message.type === 'utf8') {
+      const messageObj = JSON.parse(message.utf8Data);
+      if (messageObj.type === 'language' && messageObj.language) {
+        const index = clients.findIndex((value) => client === value);
+        clients[index].language = messageObj.language;
         return;
-      } catch(err) {
-        //No language info, do nothing
+      }
+      if(messageObj.type === 'id' && messageObj.id) {
+        client.id = messageObj.id;
+        return;
+      }
+      if(messageObj.type === 'otherId' && messageObj.otherId) {
+        client.otherId = messageObj.otherId;
+        console.log(client);
+        return;
       }
       console.log(message);
       const data = JSON.parse(message.utf8Data);
       //broadcast message to all connected clients
-      clients.filter(value => value!==client).forEach(value => {
-        if(client.language !== value.language)
-          translate(data.content, client.language, value.language).then(translated =>
-          {value.connection.send(JSON.stringify({sender: data.sender, content: translated}))});
-        else
-          value.connection.send(message.utf8Data);
-        //value.connection.send(translatedMessage);
-      });
+      // clients.filter(value => value !== client).forEach(value => {
+      //   if (client.language !== value.language)
+      //     translate(data.content, client.language, value.language).then(translated => {
+      //       value.connection.send(JSON.stringify({sender: data.sender, content: translated}))
+      //     });
+      //   else
+      //     value.connection.send(message.utf8Data);
+      //   //value.connection.send(translatedMessage);
+      // });
+      const other = clients.find((value) => value.id === client.otherId);
+
+      if (other) {
+        if (client.language !== other.language) {
+          translate(data.content, client.language, other.language).then(translated => {
+            other.connection.send(JSON.stringify({sender: data.sender, content: translated}))
+          });
+        } else
+          other.connection.send(message.utf8Data);
+      }
     }
   });
 

@@ -8,8 +8,8 @@ import store, {history} from './store/configureStore';
 import './style/styles.sass'
 //import {receiveAMessage} from "./actions/messageActions";
 import Root from './components/Root';
-import socket from './socket/socket';
 require('./favicon.ico'); // Tell webpack to load favicon.ico
+
 
 //mock receiving
 //store.dispatch(receiveAMessage());

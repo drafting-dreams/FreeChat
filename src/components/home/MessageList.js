@@ -73,6 +73,7 @@ MessageList.propTypes = {
   newMessage: PropTypes.string,
   messageListLength: PropTypes.number.isRequired,
   actions: PropTypes.object.isRequired,
+  userInfo: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

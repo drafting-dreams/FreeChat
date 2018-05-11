@@ -30,7 +30,7 @@ export default function translateApi(message, from , to) {
       .then(function (data) {
         resolve(data.data.trans_result[0].dst);
       })
-      .catch((err) => {console.log("mother fuck", err);});
+      .catch((err) => {console.log(err);});
   }));
 
 }
