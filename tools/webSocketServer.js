@@ -79,7 +79,7 @@ wsServer.on('request', function (request) {
       if (other) {
         if (client.language !== other.language) {
           translate(data.content, client.language, other.language).then(translated => {
-            other.connection.send(JSON.stringify({sender: data.sender, content: translated}))
+            other.connection.send(JSON.stringify({sender: data.sender, content: translated, receiver: data.receiver}))
           });
         } else
           other.connection.send(message.utf8Data);

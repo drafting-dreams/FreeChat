@@ -1,5 +1,6 @@
 export default {
   messages: [],
+  historyMessageState: {end: -1, more: false},
   language: 'zh',
   languages: [
     {code:'zh', language:'中文'},

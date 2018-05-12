@@ -18,9 +18,11 @@ class MessageList extends React.Component {
   render() {
     console.log("messagelist", this.props.messages);
     const user = this.props.userInfo;
+    const friend = this.props.chattingWith;
     return (
       <div>
-        {this.props.messages.map(message =>
+        {this.props.messages.filter(message =>
+          message.sender === friend.id || message.sender === user.id && message.receiver === friend.id).map(message =>
           <div>
             <div className="clearFix">
               <div>
@@ -73,7 +75,8 @@ MessageList.propTypes = {
   newMessage: PropTypes.string,
   messageListLength: PropTypes.number.isRequired,
   actions: PropTypes.object.isRequired,
-  userInfo: PropTypes.object.isRequired
+  userInfo: PropTypes.object.isRequired,
+  chattingWith: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {

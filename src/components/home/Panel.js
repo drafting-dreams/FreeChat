@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import {bindActionCreators} from 'redux';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import '../../style/panel.sass';
 import socket from '../../socket/socket';
+import * as messageActions from '../../actions/messageActions';
 
 class Panel extends React.Component {
   constructor(props, context) {
@@ -22,6 +23,7 @@ class Panel extends React.Component {
     this.sock.send(JSON.stringify({type: 'otherId', otherId: id}));
     this.setState({selected: id});
     this.props.changeParentChattingWith(id);
+    this.props.actions.getRecentHistory(this.props.userInfo.id, id);
   }
 
   render() {
@@ -63,6 +65,7 @@ class Panel extends React.Component {
 Panel.propTypes = {
   userInfo: PropTypes.object.isRequired,
   changeParentChattingWith: PropTypes.func.isRequired,
+  actions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -71,10 +74,10 @@ function mapStateToProps(state) {
   };
 }
 
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: bindActionCreators(actions, dispatch)
-//   };
-// }
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(messageActions, dispatch)
+  };
+}
 
-export default connect(mapStateToProps)(Panel);
+export default connect(mapStateToProps, mapDispatchToProps)(Panel);

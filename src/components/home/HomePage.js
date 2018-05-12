@@ -21,13 +21,14 @@ class HomePage extends React.Component {
     }));
 
 
+
     this.state = {
       message: '',
       sending: false,
       showLanguagePanel: false,
       language: props.language.language,
       messageLength: props.messageListLength,
-      chattingWith: ''
+      chattingWith: {name: '', id: ''}
     };
 
     this.sendMessage = this.sendMessage.bind(this);
@@ -65,7 +66,9 @@ class HomePage extends React.Component {
     if (!this.state.message.trim())
       return;
     this.setState({sending: true});
-    this.props.actions.sendAMessage({sender: this.props.userInfo.id, content: this.state.message})
+    this.props.actions.sendAMessage({sender: this.props.userInfo.id,
+      content: this.state.message,
+    receiver: this.state.chattingWith.id}, false)
       .then(() => {
         this.setState({message: '', sending: false});
       })
@@ -87,7 +90,7 @@ class HomePage extends React.Component {
   }
 
   findNameById(id) {
-    this.setState({chattingWith: this.props.userInfo.friends.find((friend) => id === friend.id).name});
+    this.setState({chattingWith: {id: id, name: this.props.userInfo.friends.find((friend) => id === friend.id).name}});
   }
 
   render() {
@@ -101,7 +104,7 @@ class HomePage extends React.Component {
             <Panel changeParentChattingWith={this.findNameById}/>
             <div id="chatArea" className="box chat">
               <div className="boxHead">
-                <div className="titleWrapper">{this.state.chattingWith || "Chat without obstacle !!!"}</div>
+                <div className="titleWrapper">{this.state.chattingWith.name || "Chat without obstacle !!!"}</div>
               </div>
               <div className="scrollWrapper boxBd" style={{"position": "absolute"}}>
                 <div className="boxBd scrollbarDynamic scrollContent"
@@ -109,7 +112,10 @@ class HomePage extends React.Component {
                      ref={(div) => {
                        this.scrollableDiv = div
                      }}>
-                  <Dialogue newMessage={this.state.message} sending={this.state.sending}/>
+                  <Dialogue newMessage={this.state.message}
+                            sending={this.state.sending}
+                            chattingWith={this.state.chattingWith}
+                  />
                 </div>
               </div>
               <div className="boxFt">
