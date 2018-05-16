@@ -17,7 +17,7 @@ class HomePage extends React.Component {
 
     socket().then((sock => {
       this.sock = sock;
-      sock.send(JSON.stringify({type: 'id', id: this.props.userInfo.id}));
+      sock.send(JSON.stringify({type: 'id', id: this.props.userInfo.id, friends: this.props.userInfo.friends}));
     }));
 
 
@@ -68,7 +68,8 @@ class HomePage extends React.Component {
     this.setState({sending: true});
     this.props.actions.sendAMessage({sender: this.props.userInfo.id,
       content: this.state.message,
-    receiver: this.state.chattingWith.id}, false)
+    receiver: this.state.chattingWith.id},
+      this.props.userInfo.friends.find(friend => friend.id === this.state.chattingWith.id).read)
       .then(() => {
         this.setState({message: '', sending: false});
       })
@@ -96,7 +97,8 @@ class HomePage extends React.Component {
   render() {
     const languageList = this.props.language.languages;
     const languageLabel = languageList.find(value =>
-      value.code === this.state.language).language
+      value.code === this.state.language).language;
+    console.log(this.props.userInfo);
     return (
       <div className="main">
         <div className="mainInner">
@@ -161,7 +163,6 @@ class HomePage extends React.Component {
 HomePage.propTypes = {
   language: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
-  messages: PropTypes.array.isRequired,
   messageListLength: PropTypes.number.isRequired,
   userInfo: PropTypes.object.isRequired,
 };
@@ -169,7 +170,6 @@ HomePage.propTypes = {
 function mapStateToProps(state) {
   return {
     language: state.language,
-    messages: state.messages,
     messageListLength: state.scrollBar,
     userInfo: state.user,
   };

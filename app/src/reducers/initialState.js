@@ -1,6 +1,8 @@
 export default {
   messages: [],
-  historyMessageState: {end: -1, more: false},
+  //historyMessageState: {end: -1, more: false},
+  //mea: [{friendId: '', end: -1, messageContents:[]}]
+  //now message {from to content}
   language: 'zh',
   languages: [
     {code:'zh', language:'中文'},

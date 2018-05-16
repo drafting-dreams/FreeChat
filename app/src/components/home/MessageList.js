@@ -19,10 +19,16 @@ class MessageList extends React.Component {
     console.log("messagelist", this.props.messages);
     const user = this.props.userInfo;
     const friend = this.props.chattingWith;
+    const item = this.props.messages.filter(message =>{return message.friendId === friend.id});
+    console.log('item', item);
     return (
       <div>
-        {this.props.messages.filter(message =>
-          message.sender === friend.id || message.sender === user.id && message.receiver === friend.id).map(message =>
+        <div><div id="historyMessage">查看更多消息</div></div>
+        {
+          this.props.messages.length>0 && item.length>0 ?
+
+          //.messageContents.map(message =>
+          item[0].messageContents.map(message =>
           <div>
             <div className="clearFix">
               <div>
@@ -41,7 +47,7 @@ class MessageList extends React.Component {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
         {this.props.sending && (
           <div>
             <div className="clearFix">

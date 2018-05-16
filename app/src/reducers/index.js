@@ -4,10 +4,8 @@ import messages from './messageReducer';
 import language from './languageReducer';
 import scrollBar from './scrollReducer';
 import user from './userReducer';
-import historyMessageEnd from './historyMessageReducer';
 
 const rootReducer = combineReducers({
-  historyMessageEnd,
   user,
   scrollBar,
   messages,

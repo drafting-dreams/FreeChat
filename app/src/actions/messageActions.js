@@ -5,17 +5,25 @@ export function sendSuccess(message) {
   return {type: types.SEND_SUCCESS, message}
 }
 
-export function receiveSuccess(message) {
-  return {type: types.RECEIVE_SUCCESS, message}
+export function receiveMessageSuccess(message) {
+  return {type: types.RECEIVE_MESSAGE_SUCCESS, message}
 }
 
 export function getHistorySuccess(recentObj) {
   return {type: types.GET_HISTORY_SUCCESS, recentObj};
 }
 
-export function sendAMessage(message) {
+export function receiveFriendStateSuccess(friendState) {
+  return {type: types.RECEIVE_FRIEND_STATE_SUCCESS, friendState};
+}
+
+export function updateFriendState(updateFriend) {
+  return {type: types.UPDATE_FRIEND_STATE, updateFriend};
+}
+
+export function sendAMessage(message, read) {
   return function(dispatch) {
-    return messageApi.sendMessage(message).then(message => {
+    return messageApi.sendMessage(message, read).then(message => {
       dispatch(sendSuccess(message));
     }).catch(err => {throw err});
   };
@@ -24,7 +32,13 @@ export function sendAMessage(message) {
 export function receiveAMessage(message) {
   return function(dispatch) {
     return messageApi.listening(message).then(message => {
-      dispatch(receiveSuccess(message));
+      const propertyNames = Object.getOwnPropertyNames(message);
+      if(propertyNames.includes("friendState"))
+        dispatch(receiveFriendStateSuccess(message));
+      else if(propertyNames.includes('updateFriendId'))
+        dispatch(updateFriendState(message));
+      else
+        dispatch(receiveMessageSuccess(message));
     }).catch(err => {throw err});
   };
 }

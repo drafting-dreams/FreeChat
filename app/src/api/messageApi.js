@@ -38,6 +38,7 @@ class MessageApi {
 
         const userMessageList = historyMessage.find(value => message.receiver === value.to);
         userMessageList.message.push(this._mapLocalMessageToHistoryMessage(message, read));
+        console.log('messageApi after push new message to db', historyMessage);
         resolve(message);
       } catch (err) {
         reject(err);
@@ -74,9 +75,9 @@ class MessageApi {
         const nextEnd = history.length - recentHistory.length;
         const moreHistory = history.length > recentHistory.length;
         if (recentHistory)
-          resolve({history: recentHistory, more: moreHistory, end: recentHistory.length + end});
+          resolve({history: recentHistory, more: moreHistory, end: recentHistory.length + end, friend: friend});
         else
-          resolve({history: [], more: false, end: nextEnd});
+          resolve({history: [], more: false, end: nextEnd, friend: friend});
       }
     });
   }
@@ -94,10 +95,10 @@ class MessageApi {
         const moreHistory = history.length > recentHistory.length;
         if (recentHistory) {
           console.log(recentHistory);
-          resolve({history: recentHistory, more: moreHistory});
+          resolve({history: recentHistory, more: moreHistory,end: nextEnd, friend: friend});
         }
         else
-          resolve({history: [], more: false, end: nextEnd});
+          resolve({history: [], more: moreHistory, end: nextEnd, friend: friend});
       }
     });
   }

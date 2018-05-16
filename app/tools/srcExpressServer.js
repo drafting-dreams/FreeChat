@@ -37,10 +37,10 @@ app.use(webpackDevMiddleware(bundler, {
 
 app.use(webpackHotMiddleware(bundler));
 
-app.use('/static', express.static(path.join(__dirname, '../src/static')));
+app.use('/static', express.static(path.join(__dirname, '../../src/static')));
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join( __dirname, '../src/index.html'));
+  res.sendFile(path.join( __dirname, '../../src/index.html'));
 });
 
 

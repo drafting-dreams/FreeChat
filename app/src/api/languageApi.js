@@ -1,6 +1,6 @@
 import socket from '../socket/socket';
 
-class MessageApi {
+class LanguageApi {
   static changeLanguage(language) {
     return new Promise((resolve, reject) => {
       try {
@@ -15,4 +15,4 @@ class MessageApi {
   }
 }
 
-export default MessageApi;
+export default LanguageApi;
