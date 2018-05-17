@@ -22,7 +22,7 @@ describe('Authentication', () => {
   }
 
   beforeAll(function (done) {
-    require('./connectTestDB')(
+    require('../../utils/connectTestDB')(
       function (err, db) {
         if (err) throw err;
         User.collection.drop(

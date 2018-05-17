@@ -1,0 +1,15 @@
+{
+  "name": "membership",
+  "version": "1.0.2",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest -b --watchAll **/*spec.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -24,6 +24,7 @@
     "express": "4.16.3",
     "jquery": "3.3.1",
     "md5": "2.2.1",
+    "mongoose": "5.1.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-media": "1.8.0",
@@ -33,7 +34,8 @@
     "redux": "3.6.0",
     "redux-thunk": "2.1.0",
     "utf8": "3.0.0",
-    "websocket": "1.0.25"
+    "websocket": "1.0.25",
+    "winston": "3.0.0-rc5"
   },
   "devDependencies": {
     "autoprefixer": "^8.1.0",
@@ -90,16 +92,7 @@
     "webpack-hot-middleware": "2.18.2",
     "webpack-md5-hash": "0.0.5"
   },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tools/assetsTransformer.js",
-      "\\.(css)$": "<rootDir>/tools/assetsTransformer.js"
-    },
-    "setupFiles": [
-      "raf/polyfill",
-      "./tools/enzymeTestAdapterSetup.js"
-    ]
-  },
+
   "babel": {
     "env": {
       "development": {

@@ -5,7 +5,7 @@ const db = require('mongoose');
 
 describe('api tests', () => {
   beforeAll(function connectDB(done) {
-    require('./connectTestDB')(done);
+    require("../../utils/connectTestDB")(done);
   });
   const testUser = {
     username: 'hi',

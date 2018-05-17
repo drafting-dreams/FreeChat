@@ -53,11 +53,11 @@ wsServer.on('request', function (request) {
         clients[index].language = messageObj.language;
         return;
       }
-      if(messageObj.type === 'id' && messageObj.id) {
+      if (messageObj.type === 'id' && messageObj.id) {
         client.id = messageObj.id;
         return;
       }
-      if(messageObj.type === 'otherId' && messageObj.otherId) {
+      if (messageObj.type === 'otherId' && messageObj.otherId) {
         client.otherId = messageObj.otherId;
         console.log(client);
         return;
@@ -86,5 +86,4 @@ wsServer.on('request', function (request) {
       }
     }
   });
-
 });

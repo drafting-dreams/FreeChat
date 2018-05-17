@@ -8,7 +8,7 @@ module.exports = function (done) {
           console.log(err);
           done(err);
         }
-        console.log('connect to database typingFunTest');
+        console.log('connect to database freeChatTest');
         done();
       });
 };

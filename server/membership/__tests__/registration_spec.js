@@ -18,7 +18,7 @@ describe("registration", () => {
   };
 
   beforeAll(function (done) {
-    require('./connectTestDB')(done);
+    require('../../utils/connectTestDB')(done);
   });
 
 
