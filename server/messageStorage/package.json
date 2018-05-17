@@ -1,0 +1,11 @@
+{
+  "name": "messagecenter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest -b --watchAll **/*.test.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
