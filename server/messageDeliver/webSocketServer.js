@@ -28,14 +28,17 @@ wsServer.on('request', function (request) {
   // This is the most important callback for us, we'll handle
   // all messages from users here.
   const connection = request.accept(null, request.origin);
-  const client = {connection: connection, language: 'zh', id: '', otherId: ''};
+  const client = {connection: connection, language: 'zh', id: '', otherId: '', friends: []};
   clients.push(client);
   // we need to know client index to remove them on 'close' event
   console.log((new Date()) + ' Connection accepted.');
 
   connection.on('close', function (connection) {
-    //If the prev windows closes before those backward windows, the index is wrong now
-    //So we need to get the real index for now
+    //告诉我的在线好友，我下线了
+    const onlineFriends = clients.filter(cli => client.friends.some(friend => friend.id === cli.id));
+    onlineFriends.forEach(friend => {
+      friend.connection.send(JSON.stringify({updateFriendId: client.id, state: false}))
+    });
 
     console.log((new Date()) +
       +connection.remoteAddress + " disconnected.");
@@ -53,13 +56,30 @@ wsServer.on('request', function (request) {
         clients[index].language = messageObj.language;
         return;
       }
+
       if (messageObj.type === 'id' && messageObj.id) {
+        client.friends = messageObj.friends.slice();
         client.id = messageObj.id;
+        const onlineFriends = clients.filter(cli => client.friends.some(friend => friend.id === cli.id));
+
+        //在我上线后，给我的在线好友发个消息，告诉他们我在线了
+        onlineFriends.forEach(friend => {
+          friend.connection.send(JSON.stringify({updateFriendId: client.id, state: true}))
+        });
+
+        //获取目前我的好友在线情况
+        client.friends.forEach(friend => {
+          if (clients.find(client => client.id === friend.id)) {
+            friend.read = true;
+          } else {
+            friend.read = false
+          }
+        });
+        client.connection.send(JSON.stringify({friendState: client.friends}));
         return;
       }
       if (messageObj.type === 'otherId' && messageObj.otherId) {
         client.otherId = messageObj.otherId;
-        console.log(client);
         return;
       }
       console.log(message);
@@ -79,7 +99,11 @@ wsServer.on('request', function (request) {
       if (other) {
         if (client.language !== other.language) {
           translate(data.content, client.language, other.language).then(translated => {
-            other.connection.send(JSON.stringify({sender: data.sender, content: translated, receiver: data.receiver}))
+            other.connection.send(JSON.stringify({
+              sender: data.sender,
+              content: translated,
+              receiver: data.receiver
+            }))
           });
         } else
           other.connection.send(message.utf8Data);

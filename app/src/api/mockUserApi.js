@@ -1,4 +1,5 @@
 import delay from './delay';
+import socket from '../socket/socket';
 
 const users = [
   {
