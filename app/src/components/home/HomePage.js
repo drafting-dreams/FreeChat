@@ -35,6 +35,7 @@ class HomePage extends React.Component {
     this.removeLanguagePanel = this.removeLanguagePanel.bind(this);
     this.findNameById = this.findNameById.bind(this);
     this.scrollDown = this.scrollDown.bind(this);
+    this.getRef = this.getRef.bind(this);
   }
 
   componentWillUnmount() {
@@ -43,33 +44,20 @@ class HomePage extends React.Component {
   }
 
 
-  componentWillUpdate(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     console.group("homepage will update");
     if (nextProps.language.language !== this.state.language)
       this.setState({language: nextProps.language.language});
-    // const nextItem = nextProps.messages.filter(message => message.friendId === this.state.chattingWith.id);
-    // const item = this.props.messages.filter(message => message.friendId === this.state.chattingWith.id);
-    // if (nextItem.length > 0 && item.length > 0) {
-    //   console.log('checkLength', nextItem[0].messageListLength, item[0].messageListLength);
-    //   if (nextItem[0].messageListLength > item[0].messageLength
-    //     || nextState.chattingWith.id !== this.state.chattingWith.id)
-    //     this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
-    // }
   }
 
-  componentDidUpdate() {
-    console.groupEnd("homepage will update");
-  }
 
-  getRef() {
-    console.log("get ref");
-
+  getRef(div) {
+    this.scrollableDiv = div;
   }
 
 
   scrollDown() {
-    console.error("scroll down");
-    if (this.scrollableDiv)
+    //console.error("scroll down");
       this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
   }
 
@@ -152,7 +140,6 @@ class HomePage extends React.Component {
                 >
                   <Dialogue newMessage={this.state.message}
                             sending={this.state.sending}
-                            ref={that.getRef}
                             chattingWith={this.state.chattingWith}
                             scrollDown={() => {
                               this.scrollDown()

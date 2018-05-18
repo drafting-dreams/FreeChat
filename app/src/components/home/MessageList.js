@@ -16,10 +16,6 @@ class MessageList extends React.Component {
     this.getHistoryMessage = this.getHistoryMessage.bind(this);
   }
 
-  componentWillUpdate() {
-    console.group("message will update");
-
-  }
 
   //componentDidUpdate message length management
   componentDidUpdate(prevProps) {

@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "prestart": "babel-node tools/startMessage.js",
-    "start": "concurrently -k -r -s first \"npm run test:watch\" \"npm run open:src\" \"npm run lint:watch\"",
+    "start": "concurrently -k -r -s first \"npm run open:src\" \"npm run lint:watch\"",
     "open:src": "babel-node tools/srcExpressServer.js & npm run open:socket",
     "open:dist": "babel-node tools/distServer.js",
     "open:socket": "babel-node server/messageDeliver/lib/webSocketServer.js",
