@@ -44,21 +44,21 @@ class MessageApi {
     });
   }
 
-  static listening(message) {
-    return new Promise((resolve, reject) => {
-      //listening()
-      //and then get a translatedMessage
-      // const translatedMessage = {sender: 'friend', content:"I'm from your friend!"};
-      // setTimeout(() => {
-      //   if(!translatedMessage)
-      //     reject("Can't receive nothing.");
-      //   resolve(translatedMessage);
-      // })
-      if (!message)
-        reject("Can't receive nothing.");
-      resolve(message);
-    });
-  }
+  // static listening(message) {
+  //   return new Promise((resolve, reject) => {
+  //     //listening()
+  //     //and then get a translatedMessage
+  //     // const translatedMessage = {sender: 'friend', content:"I'm from your friend!"};
+  //     // setTimeout(() => {
+  //     //   if(!translatedMessage)
+  //     //     reject("Can't receive nothing.");
+  //     //   resolve(translatedMessage);
+  //     // })
+  //     if (!message)
+  //       reject("Can't receive nothing.");
+  //     resolve(message);
+  //   });
+  // }
 
   static getHistoryMessage(user, friend, end) {
     return new Promise((resolve) => {
