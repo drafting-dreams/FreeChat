@@ -5,18 +5,18 @@
   "author": "Drafting Dreams",
   "license": "MIT",
   "scripts": {
-    "preinstall": "node app/tools/nodeVersionCheck.js",
-    "prestart": "babel-node app/tools/startMessage.js",
+    "preinstall": "node tools/nodeVersionCheck.js",
+    "prestart": "babel-node tools/startMessage.js",
     "start": "concurrently -k -r -s first \"npm run test:watch\" \"npm run open:src\" \"npm run lint:watch\"",
-    "open:src": "babel-node app/tools/srcExpressServer.js",
-    "open:dist": "babel-node app/tools/distServer.js",
-    "open:socket": "babel-node app/tools/webSocketServer.js",
-    "lint": "esw webpack.config.* app/src app/tools --color",
+    "open:src": "babel-node tools/srcExpressServer.js",
+    "open:dist": "babel-node tools/distServer.js",
+    "open:socket": "babel-node server/messageDeliver/webSocketServer.js",
+    "lint": "esw webpack.config.* app/src tools --color",
     "lint:watch": "npm run lint -- --watch",
     "test": "jest",
     "test:cover": "npm run test -- --coverage ",
     "test:watch": "jest --watchAll",
-    "build": "babel-node app/tools/build.js"
+    "build": "babel-node tools/build.js"
   },
   "dependencies": {
     "axios": "0.18.0",

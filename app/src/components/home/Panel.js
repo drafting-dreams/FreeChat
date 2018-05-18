@@ -23,12 +23,13 @@ class Panel extends React.Component {
     this.sock.send(JSON.stringify({type: 'otherId', otherId: id}));
     this.setState({selected: id});
     this.props.changeParentChattingWith(id);
-    this.props.actions.getRecentHistory(this.props.userInfo.id, id);
+    const item = this.props.messages.filter(message => message.friendId === id);
+    const end = item.length>0 ? item[0].end : -1;
+    this.props.actions.getRecentHistory(this.props.userInfo.id, id, end);
   }
 
   render() {
     const user = this.props.userInfo;
-    console.log(user);
     return (
       <div className="panel">
         <div className="panelHeader">
@@ -66,11 +67,13 @@ Panel.propTypes = {
   userInfo: PropTypes.object.isRequired,
   changeParentChattingWith: PropTypes.func.isRequired,
   actions: PropTypes.object.isRequired,
+  messages: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    userInfo: state.user
+    userInfo: state.user,
+    messages: state.messages
   };
 }
 

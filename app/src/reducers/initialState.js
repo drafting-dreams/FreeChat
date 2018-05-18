@@ -34,6 +34,6 @@ export default {
     {code:'cht', language:'繁體中文'},
     {code:'vie', language:'Người việt nam'}
   ],
-  messageListLength: 1,
+  messageListLength: 0,
   user: {},
 };

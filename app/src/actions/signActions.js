@@ -12,3 +12,9 @@ export function signIn(user) {
     }).catch(err => {throw err})
   }
 }
+
+// export function signUp(user) {
+//   return function(dispatch) {
+//     return userApi.signUp(user).then()
+//   }
+// }

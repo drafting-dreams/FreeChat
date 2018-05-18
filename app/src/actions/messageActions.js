@@ -21,6 +21,14 @@ export function updateFriendState(updateFriend) {
   return {type: types.UPDATE_FRIEND_STATE, updateFriend};
 }
 
+export function emptyMessageList() {
+  return {type: types.EMPTY_MESSAGE_LIST};
+}
+
+export function lenMessageList(friend, addon) {
+  return {type: types.ADD_LENGTH, friend, addon};
+}
+
 export function sendAMessage(message, read) {
   return function(dispatch) {
     return messageApi.sendMessage(message, read).then(message => {
@@ -43,9 +51,9 @@ export function receiveAMessage(message) {
   };
 }
 
-export function getRecentHistory(user, friend) {
+export function getRecentHistory(user, friend, end) {
   return function(dispatch) {
-    return messageApi.getRecentUnreadMessage(user, friend).then(recentObj=> {
+    return messageApi.getRecentUnreadMessage(user, friend, end).then(recentObj=> {
       dispatch(getHistorySuccess(recentObj));
     }).catch(err => {throw err});
   };

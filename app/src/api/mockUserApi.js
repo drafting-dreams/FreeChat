@@ -1,5 +1,4 @@
 import delay from './delay';
-import socket from '../socket/socket';
 
 const users = [
   {
@@ -61,14 +60,20 @@ export default class UserAPI {
       }, delay);
 
     });
-
   }
 
-  // static getUserById(id) {
-  //   return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //
-  //     }, delay);
-  //   });
-  // }
+  static signUp(userMessage) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if(userMessage.id && userMessage.pwd) {
+          users.push(Object.assign({}, userMessage, {friends: []}));
+          resolve(userMessage.id);
+        } else {
+          reject("用户名和密码不能为空");
+        }
+      }, delay);
+    })
+  }
+
+
 }

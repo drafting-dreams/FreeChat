@@ -35,10 +35,8 @@ class MessageApi {
             message: [],
           });
         }
-
         const userMessageList = historyMessage.find(value => message.receiver === value.to);
         userMessageList.message.push(this._mapLocalMessageToHistoryMessage(message, read));
-        console.log('messageApi after push new message to db', historyMessage);
         resolve(message);
       } catch (err) {
         reject(err);
@@ -67,38 +65,56 @@ class MessageApi {
       const userMessageList = historyMessage.find(value => user === value.to);
       if (userMessageList) {
         const history = userMessageList.message.filter(message => message.from === friend);
-        let recentHistory = null;
-        if (end < 0)
+        history.forEach(v => {
+          v.read = true;
+        });
+        let recentHistory = [];
+        let nextEnd;
+        if (end < 0){
           recentHistory = history.slice(-20).map(message => Object.assign(message, {to: user}));
-        else
-          recentHistory = history.slice(end - 20, end);
-        const nextEnd = history.length - recentHistory.length;
-        const moreHistory = history.length > recentHistory.length;
+          nextEnd = history.length - recentHistory.length;
+        }
+        else {
+          recentHistory = history.slice(end - 20, end).map(message => Object.assign(message, {to: user}));
+          nextEnd = end - recentHistory.length;
+        }
+        //const moreHistory = history.length > recentHistory.length;
+        //console.log('nextEnd', nextEnd, recentHistory);
         if (recentHistory)
-          resolve({history: recentHistory, more: moreHistory, end: recentHistory.length + end, friend: friend});
+          resolve({history: recentHistory, end: nextEnd, friend: friend});
         else
-          resolve({history: [], more: false, end: nextEnd, friend: friend});
+          resolve({history: [], end: nextEnd, friend: friend});
       }
     });
   }
 
-  static getRecentUnreadMessage(user, friend) {
+  static getRecentUnreadMessage(user, friend, end) {
     return new Promise((resolve) => {
       const userMessageList = historyMessage.find(value => user === value.to);
       if (userMessageList) {
-        const history = userMessageList.message.filter(message => message.from === friend && message.read === false);
-        history.forEach(v => {
+        const history = userMessageList.message.filter(message => message.from === friend);
+        const unreadHistory = history.filter(message => message.read === false);
+        unreadHistory.forEach(v => {
           v.read = true;
         });
-        const recentHistory = history.slice(-20).map(message => Object.assign(message, {to: user}));
-        const nextEnd = history.length - recentHistory.length;
-        const moreHistory = history.length > recentHistory.length;
-        if (recentHistory) {
-          console.log(recentHistory);
-          resolve({history: recentHistory, more: moreHistory,end: nextEnd, friend: friend});
+        const recentUnreadHistory = unreadHistory.slice(-20).map(message => Object.assign(message, {to: user}));
+        const nextEnd = history.length - recentUnreadHistory.length;
+        //const moreHistory = history.length > recentHistory.length;
+        if (recentUnreadHistory.length>0) {
+          resolve({history: recentUnreadHistory, end: nextEnd, friend: friend});
         }
-        else
-          resolve({history: [], more: moreHistory, end: nextEnd, friend: friend});
+        else {
+          if(end === -1)
+            resolve({history: [], end: history.length -1, friend: friend});
+          else
+            resolve({history: [], end: end, friend: friend});
+        }
+      } else {
+        historyMessage.push({
+            to: user,
+            message: [],
+          });
+        resolve({history: [], end: end, friend: friend});
       }
     });
   }

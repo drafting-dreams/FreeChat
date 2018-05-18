@@ -1,3 +1,4 @@
-//TODO  Get friends' onlineInfo from websocket & based on the info to send  different status message, done
-//TODO  Implement getting history message, need to delete temp messagelist when user log out
-//TODO  sign up page
+//TODO  Implement getting history message, need to delete temp messagelist when user log out,
+//list 中 更新length 失败， 添加历史消息失败
+
+

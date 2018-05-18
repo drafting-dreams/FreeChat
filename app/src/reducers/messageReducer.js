@@ -8,33 +8,45 @@ export default function messageReducer(state=initialState.messages, action) {
   let messageItem;
   switch(action.type) {
     case(types.SEND_SUCCESS):
-      debugger;
       tempState = state.slice();
       messageItem = state.findIndex(item => item.friendId === action.message.receiver);
       if(messageItem!==-1) {
-        tempState[messageItem].messageContents.push(action.message);
+        tempState[messageItem] = {...tempState[messageItem]};
+        const tempContents=tempState[messageItem].messageContents.slice();
+        tempState[messageItem].messageListLength = tempState[messageItem].messageListLength + 1;
+        tempState[messageItem].messageContents = [...tempContents, action.message];
       } else {
-        tempState.push({end: -1, friendId: action.message.receiver, messageContents: [action.message]});
+        tempState.push({end: -1, friendId: action.message.receiver, messageListLength: 1, messageContents: [action.message]});
       }
       return tempState;
     case(types.RECEIVE_MESSAGE_SUCCESS):
       tempState = state.slice();
       messageItem = state.findIndex(item => item.friendId === action.message.sender);
       if(messageItem!==-1) {
-        tempState[messageItem].messageContents.push(action.message);
+        tempState[messageItem] = {...tempState[messageItem]};
+        tempState[messageItem].messageListLength = tempState[messageItem].messageListLength + 1;
+        const tempContents=tempState[messageItem].messageContents.slice();
+        tempState[messageItem].messageContents = [...tempContents, action.message];
       } else {
-        tempState.push({end: -1, friendId: action.message.sender, messageContents: [action.message]});
+        tempState.push({end: -1, friendId: action.message.sender, messageListLength: 1, messageContents: [action.message]});
       }
       return tempState;
     case(types.GET_HISTORY_SUCCESS):
       tempState = state.slice();
       messageItem = state.findIndex(item => item.friendId === action.recentObj.friend);
       if(messageItem!==-1) {
-        tempState[messageItem].messageContents.push(...action.recentObj.history.map(_mapHistoryMessage2LocalMessage));
+        const tempContents = tempState[messageItem].messageContents.slice();
+        tempContents.unshift(...action.recentObj.history.map(_mapHistoryMessage2LocalMessage));
+        tempState[messageItem] = {end: action.recentObj.end, friendId: tempState[messageItem].friendId,
+          messageContents: tempContents, messageListLength: tempContents.length};
+        //tempState[messageItem].messageContents.push(...action.recentObj.history.map(_mapHistoryMessage2LocalMessage));
       } else {
-        tempState.push({end: -1, friendId: action.recentObj.friend, messageContents: [...action.recentObj.history.map(_mapHistoryMessage2LocalMessage)]});
+        tempState.unshift({end: action.recentObj.end, friendId: action.recentObj.friend, messageListLength: action.recentObj.history.length,
+          messageContents: [...action.recentObj.history.map(_mapHistoryMessage2LocalMessage)]});
       }
       return tempState;
+    case(types.EMPTY_MESSAGE_LIST):
+      return [];
     default:
       return state;
   }

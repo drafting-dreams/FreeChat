@@ -1,10 +1,12 @@
 import React from 'react';
 import '../../style/sign.sass';
+import '../../style/styles.sass';
 import {push} from 'react-router-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as signActions from '../../actions/signActions';
+import userApi from '../../api/mockUserApi';
 
 class SignPage extends React.Component {
   constructor(props, context) {
@@ -13,12 +15,15 @@ class SignPage extends React.Component {
     this.state = {
       user: {
         id: '',
+        name: '',
         pwd: '',
       },
       signingIn: false,
+      signState: 'signIn',
     };
 
     this.signIn = this.signIn.bind(this);
+    this.signUp = this.signUp.bind(this);
     this.updateUserInfo = this.updateUserInfo.bind(this);
     this.redirect = this.redirect.bind(this);
   }
@@ -31,11 +36,23 @@ class SignPage extends React.Component {
     this.props.actions.signIn(this.state.user).then(() => {
       this.redirect();
     }).catch(err => {
-      console.log(err);
       this.setState({
         signingIn: false,
-        user: {id: '用户名或密码错误', pwd: ''}
+        user: {id: err, pwd: ''}
       });
+    });
+  }
+
+  signUp(e) {
+    e.preventDefault();
+
+    userApi.signUp(this.state.user).then((id) => {
+      this.setState({
+        signState: 'signIn',
+        user: {id: id, 'pwd': '', name: ''}
+      });
+    }).catch(err => {
+      this.setState({user: {id: err, pwd: ''}});
     });
   }
 
@@ -61,11 +78,27 @@ class SignPage extends React.Component {
         <div className="signContainer">
           <h1 className="signTitle">FreeChat</h1>
           <form className="form">
-            <input type="text" name="id" onChange={this.updateUserInfo} value={this.state.user.id}
-                   placeholder="UserID"/>
+            <input type="text" name="id"
+                   onChange={this.updateUserInfo}
+                   value={this.state.user.id}
+                   autoComplete="off"
+                   placeholder="E-mail"/>
+            {(this.state.signState === "signUp") ?
+              (<input type="text" name="name"
+                   onChange={this.updateUserInfo}
+                   value={this.state.user.name}
+                   autoComplete="off"
+                   placeholder="UserName" />) : null}
+
             <input type="password" name="pwd" onChange={this.updateUserInfo} value={this.state.user.pwd}
                    placeholder="Password"/>
-            <button type="submit" id="loginButton" onClick={this.signIn}>Login</button>
+            <button type="submit" id="loginButton"
+                    onClick={this.state.signState !== 'signUp' ? this.signIn : this.signUp}>
+              {this.state.signState !== 'signUp' ? 'Login' : 'Sign Up'}
+              </button>
+            <div className="smallTip"
+                 style={{color:"white", marginTop:"20px"}}
+                 onClick={() => this.setState({signState: 'signUp'})}>don't have an account?</div>
           </form>
         </div>
         <ul className="bg-bubbles">

@@ -2,28 +2,50 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import * as scrollActions from '../../actions/scrollActions';
+import * as messageActions from '../../actions/messageActions';
 
 class MessageList extends React.Component {
   constructor(props) {
     super(props);
+
+    // this.state = {
+    //   user: this.props.userInfo,
+    //   item: this.props.messages.filter(message => message.friendId === this.props.chattingWith.id),
+    // };
+
+    this.getHistoryMessage = this.getHistoryMessage.bind(this);
   }
 
+
   //componentDidUpdate message length management
-  componentDidUpdate() {
-    if(this.props.messages.length > this.props.messageListLength)
-      this.props.actions.lenMessageList(this.props.messages.length)
+  componentDidUpdate(prevProps) {
+    const item = this.props.messages.filter(message => message.friendId === this.props.chattingWith.id);
+    console.log('didUpdate', item.length);
+    debugger;
+    if((item.length>0 && (item[0].messageContents.length > item[0].messageListLength)) ||
+      prevProps.chattingWith.id !== this.props.chattingWith.id) {
+      if(item.length>0 && (item[0].messageContents.length > item[0].messageListLength))
+        this.props.actions.lenMessageList(this.props.chattingWith.id, item[0].messageContents.length - item[0].messageListLength);
+      this.props.scrollDown();
+    }
+  }
+
+  getHistoryMessage() {
+    const item = this.props.messages.filter(message => message.friendId === this.props.chattingWith.id);
+    this.props.actions.getHistory(this.props.userInfo.id, this.props.chattingWith.id, item[0].end);
   }
 
   render() {
-    console.log("messagelist", this.props.messages);
     const user = this.props.userInfo;
     const friend = this.props.chattingWith;
-    const item = this.props.messages.filter(message =>{return message.friendId === friend.id});
-    console.log('item', item);
+    const item = this.props.messages.filter(message => message.friendId === friend.id);
     return (
       <div>
-        <div><div id="historyMessage">查看更多消息</div></div>
+        {item.length>0&&item[0].end > 0 ?
+          <div>
+            <div className="smallTip" onClick={this.getHistoryMessage}>查看更多消息</div>
+          </div> : null
+          }
         {
           this.props.messages.length>0 && item.length>0 ?
 
@@ -79,23 +101,22 @@ MessageList.propTypes = {
   messages: PropTypes.array,
   sending: PropTypes.bool.isRequired,
   newMessage: PropTypes.string,
-  messageListLength: PropTypes.number.isRequired,
   actions: PropTypes.object.isRequired,
   userInfo: PropTypes.object.isRequired,
   chattingWith: PropTypes.object.isRequired,
+  scrollDown: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     messages: state.messages,
-    messageListLength: state.scrollBar,
     userInfo: state.user,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(scrollActions, dispatch)
+    actions: bindActionCreators(messageActions, dispatch)
   };
 }
 

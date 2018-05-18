@@ -27,7 +27,6 @@ class HomePage extends React.Component {
       sending: false,
       showLanguagePanel: false,
       language: props.language.language,
-      messageLength: props.messageListLength,
       chattingWith: {name: '', id: ''}
     };
 
@@ -36,17 +35,32 @@ class HomePage extends React.Component {
     this.checkEnter = this.checkEnter.bind(this);
     this.removeLanguagePanel = this.removeLanguagePanel.bind(this);
     this.findNameById = this.findNameById.bind(this);
+    this.scrollDown = this.scrollDown.bind(this);
   }
 
   componentWillUnmount() {
     this.sock.close();
+    this.props.actions.emptyMessageList();
   }
 
 
-  componentWillReceiveProps(nextProps) {
+  componentWillUpdate(nextProps, nextState) {
+    console.log('will', this);
     if (nextProps.language.language !== this.state.language)
       this.setState({language: nextProps.language.language});
-    if (nextProps.messageListLength > this.state.messageLength)
+    const nextItem = nextProps.messages.filter(message => message.friendId === this.state.chattingWith.id);
+    const item = this.props.messages.filter(message => message.friendId === this.state.chattingWith.id);
+    if(nextItem.length>0&&item.length>0) {
+      console.log('checkLength', nextItem[0].messageListLength, item[0].messageListLength);
+      if (nextItem[0].messageListLength > item[0].messageLength
+        || nextState.chattingWith.id !== this.state.chattingWith.id)
+        this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
+    }
+  }
+
+  scrollDown() {
+    console.log(this);
+    if(this.scrollableDiv)
       this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
   }
 
@@ -98,7 +112,6 @@ class HomePage extends React.Component {
     const languageList = this.props.language.languages;
     const languageLabel = languageList.find(value =>
       value.code === this.state.language).language;
-    console.log(this.props.userInfo);
     return (
       <div className="main">
         <div className="mainInner">
@@ -117,6 +130,7 @@ class HomePage extends React.Component {
                   <Dialogue newMessage={this.state.message}
                             sending={this.state.sending}
                             chattingWith={this.state.chattingWith}
+                            scrollDown={() => {this.scrollDown()}}
                   />
                 </div>
               </div>
@@ -163,15 +177,15 @@ class HomePage extends React.Component {
 HomePage.propTypes = {
   language: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
-  messageListLength: PropTypes.number.isRequired,
   userInfo: PropTypes.object.isRequired,
+  messages: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     language: state.language,
-    messageListLength: state.scrollBar,
     userInfo: state.user,
+    messages: state.messages,
   };
 }
 
