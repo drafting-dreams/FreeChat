@@ -1,11 +1,11 @@
-import translate from './translateApi';
-
-
+/* eslint-disable no-console */
+require('dotenv').load();
+const translate = require('./translateApi');
 const WebSocketServer = require('websocket').server;
 const http = require('http');
-const webSocketsServerPort = 1337;
+
+const webSocketsServerPort = process.env.SOCKET_PORT;
 let clients = [];
-/* eslint-disable no-console */
 const server = http.createServer(function (request, response) {
   // process HTTP request. Since we're writing just WebSockets
   // server we don't have to implement anything.
