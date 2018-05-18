@@ -1,5 +1,5 @@
 const store = require("./socketStore");
-const messenger = require("./messageSender");
+const messenger = require("./messenger");
 
 function hookUpEvent(wss) {
   wss.on('connection', function (ws) {
