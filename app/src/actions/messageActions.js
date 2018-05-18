@@ -39,7 +39,6 @@ export function sendAMessage(message, read) {
 
 export function receiveAMessage(message) {
   return function(dispatch) {
-    return messageApi.listening(message).then(message => {
       const propertyNames = Object.getOwnPropertyNames(message);
       if(propertyNames.includes("friendState"))
         dispatch(receiveFriendStateSuccess(message));
@@ -47,8 +46,18 @@ export function receiveAMessage(message) {
         dispatch(updateFriendState(message));
       else
         dispatch(receiveMessageSuccess(message));
-    }).catch(err => {throw err});
   };
+  // return function(dispatch) {
+  //   return messageApi.listening(message).then(message => {
+  //     const propertyNames = Object.getOwnPropertyNames(message);
+  //     if(propertyNames.includes("friendState"))
+  //       dispatch(receiveFriendStateSuccess(message));
+  //     else if(propertyNames.includes('updateFriendId'))
+  //       dispatch(updateFriendState(message));
+  //     else
+  //       dispatch(receiveMessageSuccess(message));
+  //   }).catch(err => {throw err});
+  // };
 }
 
 export function getRecentHistory(user, friend, end) {
