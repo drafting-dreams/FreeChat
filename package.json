@@ -5,11 +5,11 @@
   "author": "Drafting Dreams",
   "license": "MIT",
   "scripts": {
-    "prestart": "babel-node app/tools/startMessage.js",
+    "prestart": "babel-node tools/startMessage.js",
     "start": "concurrently -k -r -s first \"npm run test:watch\" \"npm run open:src\" \"npm run lint:watch\"",
-    "open:src": "babel-node tools/srcExpressServer.js",
+    "open:src": "babel-node tools/srcExpressServer.js & npm run open:socket",
     "open:dist": "babel-node tools/distServer.js",
-    "open:socket": "babel-node server/messageDeliver/webSocketServer.js",
+    "open:socket": "babel-node server/messageDeliver/lib/webSocketServer.js",
     "lint": "esw webpack.config.* app/src tools --color",
     "lint:watch": "npm run lint -- --watch",
     "test": "jest",
@@ -93,16 +93,7 @@
     "webpack-hot-middleware": "2.18.2",
     "webpack-md5-hash": "0.0.5"
   },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/app/tools/assetsTransformer.js",
-      "\\.(css)$": "<rootDir>/app/tools/assetsTransformer.js"
-    },
-    "setupFiles": [
-      "raf/polyfill",
-      "./app/tools/enzymeTestAdapterSetup.js"
-    ]
-  },
+
   "babel": {
     "env": {
       "development": {

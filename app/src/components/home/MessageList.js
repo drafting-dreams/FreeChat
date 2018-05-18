@@ -16,18 +16,26 @@ class MessageList extends React.Component {
     this.getHistoryMessage = this.getHistoryMessage.bind(this);
   }
 
+  componentWillUpdate() {
+    console.group("message will update");
+
+  }
 
   //componentDidUpdate message length management
   componentDidUpdate(prevProps) {
+    console.groupEnd("message will update");
     const item = this.props.messages.filter(message => message.friendId === this.props.chattingWith.id);
-    console.log('didUpdate', item.length);
-    debugger;
-    if((item.length>0 && (item[0].messageContents.length > item[0].messageListLength)) ||
+    if ((item.length > 0 && (item[0].messageContents.length > item[0].messageListLength)) ||
       prevProps.chattingWith.id !== this.props.chattingWith.id) {
-      if(item.length>0 && (item[0].messageContents.length > item[0].messageListLength))
+      if (item.length > 0 && (item[0].messageContents.length > item[0].messageListLength)) {
         this.props.actions.lenMessageList(this.props.chattingWith.id, item[0].messageContents.length - item[0].messageListLength);
-      this.props.scrollDown();
+      }
     }
+    this.props.scrollDown();
+  }
+
+  componentWillUnmount() {
+    console.log("message un mount");
   }
 
   getHistoryMessage() {
@@ -41,35 +49,35 @@ class MessageList extends React.Component {
     const item = this.props.messages.filter(message => message.friendId === friend.id);
     return (
       <div>
-        {item.length>0&&item[0].end > 0 ?
+        {item.length > 0 && item[0].end > 0 ?
           <div>
             <div className="smallTip" onClick={this.getHistoryMessage}>查看更多消息</div>
           </div> : null
-          }
+        }
         {
-          this.props.messages.length>0 && item.length>0 ?
+          this.props.messages.length > 0 && item.length > 0 ?
 
-          //.messageContents.map(message =>
-          item[0].messageContents.map(message =>
-          <div>
-            <div className="clearFix">
+            //.messageContents.map(message =>
+            item[0].messageContents.map(message =>
               <div>
-                <div className={"message " + (message.sender===user.id ? 'me' : 'friend')}>
-                  <img className="avatar" src={"../../static/" + message.sender + ".jpeg"}/>
-                  <div className="content">
-                    <div className={"bubble bubblePrimary " + (message.sender===user.id ? 'right' : 'left')}>
-                      <div className="bubbleCont">
-                        <div className="plain">
-                          <pre>{message.content}</pre>
+                <div className="clearFix">
+                  <div>
+                    <div className={"message " + (message.sender === user.id ? 'me' : 'friend')}>
+                      <img className="avatar" src={"../../static/" + message.sender + ".jpeg"}/>
+                      <div className="content">
+                        <div className={"bubble bubblePrimary " + (message.sender === user.id ? 'right' : 'left')}>
+                          <div className="bubbleCont">
+                            <div className="plain">
+                              <pre>{message.content}</pre>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ) : null}
+            ) : null}
         {this.props.sending && (
           <div>
             <div className="clearFix">
