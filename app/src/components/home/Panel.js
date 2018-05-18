@@ -24,7 +24,7 @@ class Panel extends React.Component {
     this.setState({selected: id});
     this.props.changeParentChattingWith(id);
     const item = this.props.messages.filter(message => message.friendId === id);
-    const end = item.length>0 ? item[0].end : -1;
+    const end = item.length > 0 ? item[0].end : -1;
     this.props.actions.getRecentHistory(this.props.userInfo.id, id, end);
   }
 
@@ -44,9 +44,11 @@ class Panel extends React.Component {
         </div>
         <div className="scrollWrapper" style={{position: "relative", height: "100%"}}>
           <div className="scrollContent" style={{height: "100%"}}>
-            {user.friends.map(friend => (
+            {user.friends && user.friends.map(friend => (
               <div className={"chatItem" + (this.state.selected === friend.id ? " active" : "")}
-                   onClick={() => {this.selectFriend(friend.id)}}>
+                   onClick={() => {
+                     this.selectFriend(friend.id)
+                   }}>
                 <div className="avatar">
                   <img src={"../../static/" + friend.id + ".jpeg"}/>
                 </div>
