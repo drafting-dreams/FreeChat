@@ -1,6 +1,8 @@
 const store = require("./socketStore");
 const messenger = require("./messenger");
 
+const socketToId = {};
+
 function hookUpEvent(wss) {
   wss.on('connection', function (ws) {
     ws.on('message', function (data) {
@@ -8,12 +10,18 @@ function hookUpEvent(wss) {
 
       switch (message.type) {
         case "init": {
+          socketToId[ws] = message.userId;
           storeSocket(ws, message.userId);
           break;
         }
 
+        case "changeLanguage": {
+          changeLanguage(socketToId[ws], message.language);
+          break;
+        }
+
         case "messaging": {
-          messenger.sendMessage(data);
+          messenger.sendMessage(message);
           break;
         }
       }
@@ -22,5 +30,12 @@ function hookUpEvent(wss) {
 }
 
 function storeSocket(ws, id) {
-  store.set(id, ws);
+  store.set(id, {socket: ws});
 }
+
+function changeLanguage(id, lan) {
+  const conf = store.get(id);
+  conf.language = lan;
+}
+
+module.exports = {hookUpEvent};

@@ -18,6 +18,7 @@ const historyMessage = [
 
 class MessageApi {
   static sendMessage(message, read) {
+    // todo: to be refactored
     return new Promise((resolve, reject) => {
       //translateAndSend()
       // setTimeout(() => {
@@ -29,14 +30,12 @@ class MessageApi {
         const sock = socket();
         sock.send(JSON.stringify(message));
 
-        if (!historyMessage.find(v => v.to===message.receiver)) {
+        if (!historyMessage.find(v => v.to === message.receiver)) {
           historyMessage.push({
             to: message.receiver,
             message: [],
           });
         }
-        const userMessageList = historyMessage.find(value => message.receiver === value.to);
-        userMessageList.message.push(this._mapLocalMessageToHistoryMessage(message, read));
         resolve(message);
       } catch (err) {
         reject(err);
@@ -70,7 +69,7 @@ class MessageApi {
         });
         let recentHistory = [];
         let nextEnd;
-        if (end < 0){
+        if (end < 0) {
           recentHistory = history.slice(-20).map(message => Object.assign(message, {to: user}));
           nextEnd = history.length - recentHistory.length;
         }
@@ -100,20 +99,20 @@ class MessageApi {
         const recentUnreadHistory = unreadHistory.slice(-20).map(message => Object.assign(message, {to: user}));
         const nextEnd = history.length - recentUnreadHistory.length;
         //const moreHistory = history.length > recentHistory.length;
-        if (recentUnreadHistory.length>0) {
+        if (recentUnreadHistory.length > 0) {
           resolve({history: recentUnreadHistory, end: nextEnd, friend: friend});
         }
         else {
-          if(end === -1)
-            resolve({history: [], end: history.length -1, friend: friend});
+          if (end === -1)
+            resolve({history: [], end: history.length - 1, friend: friend});
           else
             resolve({history: [], end: end, friend: friend});
         }
       } else {
         historyMessage.push({
-            to: user,
-            message: [],
-          });
+          to: user,
+          message: [],
+        });
         resolve({history: [], end: end, friend: friend});
       }
     });

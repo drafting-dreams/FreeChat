@@ -31,8 +31,7 @@ module.exports = function translateApi(message, from, to) {
         resolve(data.data.trans_result[0].dst);
       })
       .catch((err) => {
-        console.log(err);
+        console.error("translated error: ", err);
       });
   }));
-
-}
+};

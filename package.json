@@ -10,6 +10,9 @@
     "open:src": "babel-node tools/srcExpressServer.js & npm run open:socket",
     "open:dist": "babel-node tools/distServer.js",
     "open:socket": "babel-node server/messageDeliver/lib/webSocketServer.js",
+    "s": "concurrently -k -r -s first \"npm run start-app\" \"npm run start-server\"",
+    "start-server": "node ./server/app.js",
+    "start-app": "babel-node tools/srcExpressServer.js",
     "lint": "esw webpack.config.* app/src tools --color",
     "lint:watch": "npm run lint -- --watch",
     "test": "jest",
@@ -20,11 +23,14 @@
   "dependencies": {
     "axios": "0.18.0",
     "babel-polyfill": "^6.26.0",
+    "body-parser": "1.18.3",
     "dotenv": "5.0.1",
     "express": "4.16.3",
+    "express-session": "1.15.6",
     "jquery": "3.3.1",
     "md5": "2.2.1",
     "mongoose": "5.1.1",
+    "passport": "0.4.0",
     "react": "16.2.0",
     "react-dom": "16.2.0",
     "react-media": "1.8.0",
@@ -93,7 +99,6 @@
     "webpack-hot-middleware": "2.18.2",
     "webpack-md5-hash": "0.0.5"
   },
-
   "babel": {
     "env": {
       "development": {

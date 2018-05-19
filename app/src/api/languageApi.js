@@ -8,7 +8,7 @@ class LanguageApi {
         const sock = socket();
         sock.send(lang);
         resolve(language);
-      } catch(err) {
+      } catch (err) {
         reject(err);
       }
     });

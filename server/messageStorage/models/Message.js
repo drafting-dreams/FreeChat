@@ -4,7 +4,8 @@ const Message = new mongoose.Schema({
   to: {type: mongoose.Schema.Types.ObjectId, required: true},
   timestamp: {type: Number, required: true, default: Date.now},
   message: {type: String, required: true},
-  status: {type: String, required: true, enum: ['sent', 'unsent']}
+  status: {type: String, required: true, enum: ['sent', 'unsent']},
+  translated: String
 });
 
 

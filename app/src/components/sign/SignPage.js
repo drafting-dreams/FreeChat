@@ -33,14 +33,16 @@ class SignPage extends React.Component {
     //window.location.href = "http://localhost:3000/home";
     this.setState({signingIn: true});
 
-    this.props.actions.signIn(this.state.user).then(() => {
-      this.redirect();
-    }).catch(err => {
-      this.setState({
-        signingIn: false,
-        user: {id: err, pwd: ''}
+    this.props.actions.signIn(this.state.user)
+      .then(() => {
+        this.redirect();
+      })
+      .catch(err => {
+        this.setState({
+          signingIn: false,
+          user: {id: err, pwd: ''}
+        });
       });
-    });
   }
 
   signUp(e) {
@@ -83,34 +85,42 @@ class SignPage extends React.Component {
                    value={this.state.user.id}
                    autoComplete="off"
                    placeholder="E-mail"/>
-            {(this.state.signState === "signUp") ?
-              (<input type="text" name="name"
-                   onChange={this.updateUserInfo}
-                   value={this.state.user.name}
-                   autoComplete="off"
-                   placeholder="UserName" />) : null}
+            {
+              this.state.signState === "signUp" &&
+              <input type="text" name="name"
+                     onChange={this.updateUserInfo}
+                     value={this.state.user.name}
+                     autoComplete="off"
+                     placeholder="UserName"/>
+            }
 
             <input type="password" name="pwd" onChange={this.updateUserInfo} value={this.state.user.pwd}
                    placeholder="Password"/>
+
             <button type="submit" id="loginButton"
-                    onClick={this.state.signState !== 'signUp' ? this.signIn : this.signUp}>
-              {this.state.signState !== 'signUp' ? 'Login' : 'Sign Up'}
-              </button>
+                    onClick={this.state.signState !== 'signUp' ? this.signIn : this.signUp}
+            >
+              {(this.state.signState !== 'signUp') ? 'Login' : 'Sign Up'}
+            </button>
+
             <div className="smallTip"
-                 style={{color:"white", marginTop:"20px"}}
-                 onClick={() => this.setState({signState: 'signUp'})}>don't have an account?</div>
+                 style={{color: "white", marginTop: "20px"}}
+                 onClick={() => this.setState({signState: 'signUp'})}
+            >
+              don't have an account?
+            </div>
           </form>
         </div>
         <ul className="bg-bubbles">
           <li>扉恰</li>
           <li>FreeChat</li>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li/>
+          <li/>
+          <li/>
           <li>無料チャット</li>
           <li>Kostenloser Chat</li>
-          <li></li>
-          <li></li>
+          <li/>
+          <li/>
           <li>Бесплатный чат</li>
         </ul>
       </div>
