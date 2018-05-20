@@ -1,5 +1,5 @@
 const passport = require('passport');
-const membership = require('../membership');
+const membership = require('../lib/membership');
 const logger = require("../utils/getLogger");
 
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
         confirm: req.body.confirm
       },
       function (err, result) {
-        logger.error(err, result);
+        logger.info("register result", result);
         res.json(result);
       }
     );

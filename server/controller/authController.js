@@ -11,6 +11,7 @@ function main(router, prefix) {
       res.redirect('/');
     });
 
+
   router.route(prefix + '/register')
     .post((req, res, next) => membershipService.register(req, res, next));
 

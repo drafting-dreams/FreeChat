@@ -65,6 +65,28 @@
     ```
     - 返回一个Promise， resolve({history: [{from:'', to:'', content:''}], end:Number类型, friend:''})
 
+
+### /api/contact/find/:email
+#### get
+#### response
+* success
+    ```js
+    {
+        "success": true,
+        "user": {
+            "name": "hi",
+            "email": "123@me.com"
+         }
+    }
+    ```
+* fail
+    ```js
+    {
+        "success": false
+    }
+    ```
+
+
 # socket message
 * 建立连接以后发送信息，确认身份
     ```js

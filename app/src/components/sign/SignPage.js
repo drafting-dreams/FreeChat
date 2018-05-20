@@ -34,7 +34,7 @@ class SignPage extends React.Component {
       .getUserInfo()
       .then(user => {
         if (user.email) {
-          this.props.actions.signInSuccess(user);
+          this.props.actions.signInSuccess({name: user.name, email: user.email});
           this.redirect(user.email);
         } else {
           this.setState({signingIn: false});

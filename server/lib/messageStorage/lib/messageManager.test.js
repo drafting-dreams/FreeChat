@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Message = require("../models/Message");
 
 beforeAll(done => {
-  require("../../utils/connectTestDB")(done);
+  require("../../../utils/connectTestDB")(done);
 });
 
 afterAll(done => {

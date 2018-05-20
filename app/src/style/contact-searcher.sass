@@ -1,0 +1,53 @@
+#contact-searcher
+  width: 100%
+  position: relative
+  .search-input
+    padding: 0.5em
+    display: block
+    margin: 10px auto
+    width: 90%
+    height: 2rem
+
+    background-color: rgba(white, 0.2)
+    border: none
+    border-radius: 4px
+    font-size: 1rem
+    color: cornsilk
+
+  #delete-icon
+    position: absolute
+    top: 0
+    right: 3%
+    height: 2rem
+    width: 2rem
+    color: darkgray
+    //text-alikgn: center
+    //font-weight: bolder
+    //font-size: 1.5rem
+    //transform: rotate(45deg)
+    transition: all 0.3s
+    &:before
+      content: ''
+      position: absolute
+      top: 1rem
+      width: 1rem
+      height: 2px
+      background-color: currentColor
+      transform: rotate(-45deg)
+
+    &:after
+      content: ''
+      position: absolute
+      top: 1rem
+      width: 1rem
+      height: 2px
+      background-color: currentColor
+      transform: rotate(45deg)
+
+    &:hover
+      color: whitesmoke
+
+  #result-list
+    text-align: center
+    color: whitesmoke
+    background-color: hsl(216, 13%, 15%)

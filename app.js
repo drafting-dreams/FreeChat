@@ -4,13 +4,14 @@ const session = require('express-session');
 const routes = require("./server/controller/index");
 const passport = require('passport'),
   LocalStrategy = require('passport-local'),
-  memberShip = require('./server/membership/index');
+  memberShip = require('./server/lib/membership/index');
 const logger = require("./server/utils/getLogger");
 const express = require("express");
 const mongoose = require('mongoose');
 const path = require("path");
 const isDev = process.env.NODE_ENV !== 'production';
-require("./server/messageDeliver/index");
+const historyApiFallback = require('connect-history-api-fallback');
+require("./server/lib/messageDeliver/index");
 
 
 mongoose.connect(process.env.DB_STR).then(() => {
@@ -46,6 +47,7 @@ passport.deserializeUser(function (user, done) {
   // });
 });
 
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(
@@ -66,6 +68,7 @@ app.use(passport.session());
 if (isDev) {
   // static assets served by webpack-dev-middleware & webpack-hot-middleware for development
   console.log('dev mode');
+  // app.use(historyApiFallback({index: '/'}));
   const webpack = require('webpack'),
     webpackDevMiddleware = require('webpack-dev-middleware'),
     webpackHotMiddleware = require('webpack-hot-middleware'),
@@ -115,6 +118,8 @@ app.use(function (err, req, res) {
   res.status(err.status || 500);
   res.sender('error');
 });
+
+console.log(app._router.stack)
 
 app.listen(3000, function () {
   console.log("app start");
