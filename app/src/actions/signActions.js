@@ -6,10 +6,19 @@ export function signInSuccess(message) {
 }
 
 export function signIn(user) {
-  return function(dispatch) {
-    return userApi.signIn(user).then(message => {
-      dispatch(signInSuccess(message));
-    }).catch(err => {throw err})
+  return function (dispatch) {
+    return userApi.signIn(user)
+      .then(
+        message => {
+          dispatch(signInSuccess(message));
+        },
+        rejected => {
+          console.log("sign in fail", rejected);
+        }
+      )
+      .catch(err => {
+        throw err
+      });
   }
 }
 

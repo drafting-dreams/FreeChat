@@ -11,7 +11,7 @@ module.exports = {
     }
 
     passport.authenticate('local', function (err, user, info) {
-      logger.debug('authenticate user', user);
+      logger.debug('authenticate user', info);
       if (err) logger.error(err);
       if (authenticateSuccess(user, info)) {
         req.logIn(user, function (err) {

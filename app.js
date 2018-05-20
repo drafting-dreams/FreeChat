@@ -1,12 +1,17 @@
 require('dotenv').load();
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const routes = require("./server/controller/index");
 const passport = require('passport'),
   LocalStrategy = require('passport-local'),
-  memberShip = require('./membership/index');
-const logger = require("./utils/getLogger");
+  memberShip = require('./server/membership/index');
+const logger = require("./server/utils/getLogger");
 const express = require("express");
 const mongoose = require('mongoose');
+const path = require("path");
+const isDev = process.env.NODE_ENV !== 'production';
+require("./server/messageDeliver/index");
+
 
 mongoose.connect(process.env.DB_STR).then(() => {
   logger.info("connect to db: " + process.env.DB_STR);
@@ -58,12 +63,41 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+if (isDev) {
+  // static assets served by webpack-dev-middleware & webpack-hot-middleware for development
+  console.log('dev mode');
+  const webpack = require('webpack'),
+    webpackDevMiddleware = require('webpack-dev-middleware'),
+    webpackHotMiddleware = require('webpack-hot-middleware'),
+    webpackDevConfig = require('./app/webpack.config.dev.js');
+
+  const compiler = webpack(webpackDevConfig);
+
+  // attach to the compiler & the web
+  app.use(webpackDevMiddleware(compiler, {
+
+    // public path should be the same with webpack config
+    publicPath: webpackDevConfig.output.publicPath,
+    // noInfo: true,
+    stats: {
+      colors: true
+    }
+  }));
+  app.use(webpackHotMiddleware(compiler, {
+    log: console.log
+  }));
+} else {
+  app.use(express.static(path.join(__dirname, './dist/')));
+}
+
 app.use(function (req, res, next) {
   logger.info(req.url);
+  logger.info("req.body", req.body);
   res.locals.user = req.user;
   next();
 });
 
+app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -80,4 +114,8 @@ app.use(function (err, req, res) {
   // render the error page
   res.status(err.status || 500);
   res.sender('error');
+});
+
+app.listen(3000, function () {
+  console.log("app start");
 });

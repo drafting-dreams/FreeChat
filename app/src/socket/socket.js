@@ -24,7 +24,7 @@ import store from '../store/configureStore';
 let websocket = null;
 
 
-export default function getWebSocket() {
+export default function getWebSocket(email) {
   if (!websocket) {
     return new Promise((resolve, reject) => {
       websocket = new WebSocket("ws://localhost:1337");
@@ -34,14 +34,15 @@ export default function getWebSocket() {
 
       websocket.addEventListener('open', function () {
         console.log('client open');
+        websocket.send(JSON.stringify({type: 'init', email}));
         resolve(websocket);
       });
 
-      websocket.addEventListener('error', function() {
+      websocket.addEventListener('error', function () {
         reject('WebSocket connect failed');
       });
 
-      websocket.addEventListener('close', function() {
+      websocket.addEventListener('close', function () {
         websocket = null;
       })
     });

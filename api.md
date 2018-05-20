@@ -64,3 +64,12 @@
         }
     ```
     - 返回一个Promise， resolve({history: [{from:'', to:'', content:''}], end:Number类型, friend:''})
+
+# socket message
+* 建立连接以后发送信息，确认身份
+    ```js
+    {
+        type: 'init',
+        email: userEmail
+    }
+    ```

@@ -13,13 +13,7 @@ import socket from '../../socket/socket';
 class HomePage extends React.Component {
   constructor(props, context) {
     super(props, context);
-
-
-    socket().then((sock => {
-      this.sock = sock;
-      sock.send(JSON.stringify({type: 'id', id: this.props.userInfo.id, friends: this.props.userInfo.friends}));
-    }));
-
+    this.openSocket();
 
     this.state = {
       message: '',
@@ -38,6 +32,12 @@ class HomePage extends React.Component {
     this.getRef = this.getRef.bind(this);
   }
 
+  openSocket() {
+    socket(this.props.userInfo.email).then((sock => {
+      this.sock = sock;
+    }));
+  }
+
   componentWillUnmount() {
     this.sock.close();
     this.props.actions.emptyMessageList();
@@ -45,7 +45,6 @@ class HomePage extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    console.group("homepage will update");
     if (nextProps.language.language !== this.state.language)
       this.setState({language: nextProps.language.language});
   }
@@ -58,7 +57,7 @@ class HomePage extends React.Component {
 
   scrollDown() {
     //console.error("scroll down");
-      this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
+    this.scrollableDiv.scrollTop = this.scrollableDiv.scrollHeight;
   }
 
 

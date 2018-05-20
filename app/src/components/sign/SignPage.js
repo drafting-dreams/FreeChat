@@ -14,11 +14,12 @@ class SignPage extends React.Component {
 
     this.state = {
       user: {
-        id: '',
-        name: '',
-        pwd: '',
+        email: '',
+        password: '',
+        confirm: '',
+        username: ''
       },
-      signingIn: false,
+      signingIn: true,
       signState: 'signIn',
     };
 
@@ -28,39 +29,50 @@ class SignPage extends React.Component {
     this.redirect = this.redirect.bind(this);
   }
 
+  componentDidMount() {
+    userApi
+      .getUserInfo()
+      .then(user => {
+        if (user.email) {
+          this.props.actions.signInSuccess(user);
+          this.redirect(user.email);
+        } else {
+          this.setState({signingIn: false});
+        }
+      });
+  }
+
   signIn(e) {
     e.preventDefault();
     //window.location.href = "http://localhost:3000/home";
     this.setState({signingIn: true});
+    const user = this.state.user;
 
-    this.props.actions.signIn(this.state.user)
-      .then(() => {
-        this.redirect();
-      })
-      .catch(err => {
-        this.setState({
-          signingIn: false,
-          user: {id: err, pwd: ''}
-        });
+    userApi
+      .signIn({email: user.email, password: user.password})
+      .then(res => {
+        if (res.logged) {
+          this.props.actions.signInSuccess({email: res.email, name: res.name});
+          this.redirect(res.email);
+        } else {
+          //todo show toastr
+        }
       });
   }
 
   signUp(e) {
     e.preventDefault();
-
-    userApi.signUp(this.state.user).then((id) => {
-      this.setState({
-        signState: 'signIn',
-        user: {id: id, 'pwd': '', name: ''}
+    const user = this.state.user;
+    userApi
+      .signUp(user)
+      .then(res => {
+        //todo check result
       });
-    }).catch(err => {
-      this.setState({user: {id: err, pwd: ''}});
-    });
   }
 
-  redirect() {
+  redirect(email) {
     this.setState({signingIn: false});
-    this.props.actions.push('/home/' + this.state.user.id);
+    this.props.actions.push('/home/' + email);
   }
 
   updateUserInfo(e) {
@@ -80,22 +92,38 @@ class SignPage extends React.Component {
         <div className="signContainer">
           <h1 className="signTitle">FreeChat</h1>
           <form className="form">
-            <input type="text" name="id"
+            <input type="text" name="email"
                    onChange={this.updateUserInfo}
-                   value={this.state.user.id}
+                   value={this.state.user.email}
                    autoComplete="off"
                    placeholder="E-mail"/>
+
             {
               this.state.signState === "signUp" &&
-              <input type="text" name="name"
+              <input type="text"
+                     name="username"
                      onChange={this.updateUserInfo}
-                     value={this.state.user.name}
+                     value={this.state.user.username}
                      autoComplete="off"
-                     placeholder="UserName"/>
+                     placeholder="name"/>
             }
 
-            <input type="password" name="pwd" onChange={this.updateUserInfo} value={this.state.user.pwd}
+            <input type="password"
+                   name="password"
+                   onChange={this.updateUserInfo}
+                   value={this.state.user.password}
                    placeholder="Password"/>
+
+
+            {
+              this.state.signState === "signUp" &&
+              <input type="password"
+                     name="confirm"
+                     onChange={this.updateUserInfo}
+                     value={this.state.user.confirm}
+                     autoComplete="off"
+                     placeholder="confirm"/>
+            }
 
             <button type="submit" id="loginButton"
                     onClick={this.state.signState !== 'signUp' ? this.signIn : this.signUp}
@@ -104,7 +132,7 @@ class SignPage extends React.Component {
             </button>
 
             <div className="smallTip"
-                 style={{color: "white", marginTop: "20px"}}
+                 style={{color: "white", fontSize: '17px', marginTop: "20px"}}
                  onClick={() => this.setState({signState: 'signUp'})}
             >
               don't have an account?
