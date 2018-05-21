@@ -18,7 +18,7 @@ export function receiveFriendStateSuccess(friendState) {
 }
 
 export function updateFriendState(updateFriend) {
-  return {type: types.UPDATE_FRIEND_STATE, updateFriend};
+  return {type: types.UPDATE_FRIEND_LIST, updateFriend};
 }
 
 export function emptyMessageList() {

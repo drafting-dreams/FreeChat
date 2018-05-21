@@ -6,9 +6,11 @@ export function switchLanguageSuccess(language) {
 }
 
 export function switchLanguage(language) {
-  return function(dispatch) {
+  return function (dispatch) {
     languageApi.changeLanguage(language).then(language => {
       dispatch(switchLanguageSuccess(language));
-    }).catch(err => {throw err});
+    }).catch(err => {
+      throw err
+    });
   };
 }

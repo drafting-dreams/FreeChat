@@ -23,6 +23,7 @@ class Panel extends React.Component {
 
 
   getFriends() {
+
   }
 
 

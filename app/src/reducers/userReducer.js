@@ -6,18 +6,18 @@ export default function userReducer(state = initialState.user, action) {
     case(types.SIGN_IN_SUCCESS):
       return Object.assign({}, action.message);
 
-    case(types.UPDATE_FRIEND_STATE):
+    case(types.UPDATE_FRIEND_LIST): {
       const friends = state.friends.slice();
-      console.log('userReducer',action.updateFriend);
+      console.log('userReducer', action.updateFriend);
       let index = 0;
       const friend = friends.find((friend, i) => {
         index = i;
-        return friend.id === action.updateFriend.updateFriendId});
+        return friend.id === action.updateFriend.updateFriendId
+      });
       const newFriend = Object.assign({}, friend, {read: action.updateFriend.state});
       friends[index] = newFriend;
-      // friends.splice(index, 1);
-      // friends.push(newFriend);
       return Object.assign({}, state, {friends: friends});
+    }
 
     case(types.RECEIVE_FRIEND_STATE_SUCCESS):
       return Object.assign({}, state, {friends: action.friendState.friendState});
