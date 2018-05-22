@@ -8,4 +8,10 @@ function addContact(email) {
   return $.get(`/api/contact/addContact/${email}`);
 }
 
-export default {findUserByEmail, addContact}
+
+function getContact() {
+  return $.get("/api/contact/getContacts");
+
+}
+
+export default {findUserByEmail, addContact, getContact}

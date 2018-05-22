@@ -9,7 +9,8 @@ export default function getWebSocket(email) {
     return new Promise((resolve, reject) => {
       websocket = new WebSocket("ws://localhost:1337");
       websocket.addEventListener("message", function (event) {
-        store.dispatch(receiveAMessage(JSON.parse(event.data)));
+        console.log("socket receive: ", JSON.parse(event.data));
+        // store.dispatch(receiveAMessage(JSON.parse(event.data)));
       });
 
       websocket.addEventListener('open', function () {
@@ -19,6 +20,7 @@ export default function getWebSocket(email) {
       });
 
       websocket.addEventListener('error', function () {
+        console.log('WebSocket connect failed');
         reject('WebSocket connect failed');
       });
 

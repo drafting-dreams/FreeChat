@@ -1,10 +1,13 @@
 const socketStore = require("./socketStore");
 const messageStorage = require("../../messageStorage");
 const translator = require("./translateApi");
+const logger = require("../utils/getLogger");
 
 function sendMessage(arg) {
   const senderConf = socketStore.get(arg.sender);
   const receiverConf = socketStore.get(arg.receiver);
+
+  logger.debug("send message", arg);
 
   if (!receiverConf) {
     return _saveMessage(arg, 'unsent');
@@ -15,26 +18,28 @@ function sendMessage(arg) {
     translator(arg.content, senderConf.language, receiverConf.language)
       .then(translated => {
         message.translated = translated;
-        _sendAndSaveMessage(message, receiverConf.socket)
+        _sendAndSaveMessage(message, receiverConf.socket);
       })
       .catch(err => {
         console.error("translate error: ", err);
       });
   } else {
-    _sendAndSaveMessage(message, receiverConf.socket)
+    _sendAndSaveMessage(message, receiverConf.socket);
   }
 }
 
 function _sendAndSaveMessage(message, ws) {
   _saveMessage(message, 'sent');
-  ws.send(JSON.stringify(message));
+
+  const m = {content: message.content, translated: message.translated};
+  ws.send(JSON.stringify(m));
 }
 
 function _saveMessage(arg, status) {
   const obj = {
-    from: arg.sender,
-    to: arg.receiver,
-    content: arg.content,
+    sender: arg.sender,
+    receiver: arg.receiver,
+    message: arg.content,
     status
   };
 

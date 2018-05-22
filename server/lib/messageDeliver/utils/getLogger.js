@@ -3,14 +3,9 @@ const {combine, prettyPrint, printf} = format;
 
 
 const myFormat = printf(info => {
-  const stringifiedRest = JSON.stringify(Object.assign({}, info, {
-    level: undefined,
-    message: undefined,
-    splat: undefined,
-    timestamp: undefined
-  }));
+  const stringifiedRest = info.toString();
 
-  return `[${info.level}]: ${JSON.stringify(info.message)}  ${stringifiedRest.length > 2 ? stringifiedRest:''}`;
+  return `[${info.level}][messageDeliver]: ${JSON.stringify(info.message)}  ${stringifiedRest.length > 2 ? stringifiedRest:''}`;
 });
 const logger = createLogger({
   level: 'debug',

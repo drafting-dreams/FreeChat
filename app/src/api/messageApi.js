@@ -17,30 +17,11 @@ const historyMessage = [
 ];
 
 class MessageApi {
-  static sendMessage(message, read) {
+  static sendMessage(message) {
+    message.type = "messaging";
     // todo: to be refactored
-    return new Promise((resolve, reject) => {
-      //translateAndSend()
-      // setTimeout(() => {
-      //   if(!message.content.trim())
-      //     reject("Can't send empty message.");
-      //   resolve(message);
-      // }, delay);
-      try {
-        const sock = socket();
-        sock.send(JSON.stringify(message));
-
-        if (!historyMessage.find(v => v.to === message.receiver)) {
-          historyMessage.push({
-            to: message.receiver,
-            message: [],
-          });
-        }
-        resolve(message);
-      } catch (err) {
-        reject(err);
-      }
-    });
+    const sock = socket();
+    sock.send(JSON.stringify(message));
   }
 
   // static listening(message) {

@@ -1,5 +1,9 @@
 import React, {Component} from "react";
 import api from "../../api/contactApi";
+import {connect} from 'react-redux';
+import {updateFriendList} from "../../actions/messageActions";
+import PropTypes from 'prop-types';
+
 
 class ContactSearcher extends Component {
   constructor(props) {
@@ -34,7 +38,10 @@ class ContactSearcher extends Component {
     api.addContact(this.state.email)
       .then(() => {
         this.clearBox();
-        //todo trigger refresh friendList
+        api.getContact()
+          .then(res => {
+            this.props.updateFriendList(res.contacts);
+          });
       });
   }
 
@@ -71,5 +78,15 @@ class ContactSearcher extends Component {
   }
 }
 
-export default ContactSearcher;
+ContactSearcher.propTypes = {
+  updateFriendList: PropTypes.func.isRequired
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateFriendList: arg => dispatch(updateFriendList(arg))
+  };
+}
+
+export default connect(null, mapDispatchToProps)(ContactSearcher);
 

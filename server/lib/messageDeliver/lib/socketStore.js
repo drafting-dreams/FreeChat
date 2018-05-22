@@ -1,6 +1,7 @@
 const store = {};
 
 function set(userId, ws) {
+  console.log(userId + ' socket stored');
   store[userId] = ws;
 }
 

@@ -1,17 +1,20 @@
 const store = require("./socketStore");
 const messenger = require("./messenger");
+const logger = require("../utils/getLogger");
 
 const socketToId = {};
 
 function hookUpEvent(wss) {
   wss.on('connection', function (ws) {
+    ws.send(JSON.stringify({connected: true}));
     ws.on('message', function (data) {
       const message = JSON.parse(data);
+      logger.debug("socket receive ", message);
 
       switch (message.type) {
         case "init": {
-          socketToId[ws] = message.userId;
-          storeSocket(ws, message.userId);
+          socketToId[ws] = message.email;
+          storeSocket(ws, message.email);
           break;
         }
 

@@ -6,6 +6,7 @@ import '../../style/panel.sass';
 import socket from '../../socket/socket';
 import * as messageActions from '../../actions/messageActions';
 import ContactSearcher from "./ContactSearcher";
+import api from "../../api/contactApi";
 
 class Panel extends React.Component {
   constructor(props, context) {
@@ -19,24 +20,24 @@ class Panel extends React.Component {
   }
 
   componentDidMount() {
+    this.getFriends();
   }
-
 
   getFriends() {
-
+    api.getContact()
+      .then(res => {
+        this.props.actions.updateFriendList(res.contacts);
+      });
   }
 
-
   selectFriend(email) {
-    this.sock.send(JSON.stringify({type: 'otherId', otherId: email}));
+    // this.sock.send(JSON.stringify({type: 'otherId', otherId: email}));
 
     this.setState({selected: email});
 
     this.props.changeParentChattingWith(email);
-    const item = this.props.messages.filter(message => message.friendId === email);
-    const end = item.length > 0 ? item[0].end : -1;
-
-    this.props.actions.getRecentHistory(this.props.userInfo.email, email, end);
+    //todo load history message
+    this.props.actions.getRecentHistory(this.props.userInfo.email, email);
   }
 
   render() {
@@ -62,7 +63,7 @@ class Panel extends React.Component {
                 <div key={friend.email}
                      className={"chatItem" + (this.state.selected === friend.id ? " active" : "")}
                      onClick={() => {
-                       this.selectFriend(friend.id)
+                       this.selectFriend(friend.email)
                      }}
                 >
                   <div className="avatar">

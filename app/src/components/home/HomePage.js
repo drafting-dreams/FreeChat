@@ -8,6 +8,7 @@ import Dialogue from './MessageList';
 import LanguageBox from './LanguageBox';
 import Panel from './Panel';
 import socket from '../../socket/socket';
+import messageApi from "../../api/messageApi";
 
 
 class HomePage extends React.Component {
@@ -27,7 +28,7 @@ class HomePage extends React.Component {
     this.editMessage = this.editMessage.bind(this);
     this.checkEnter = this.checkEnter.bind(this);
     this.removeLanguagePanel = this.removeLanguagePanel.bind(this);
-    this.findNameById = this.findNameById.bind(this);
+    this.findNameByEmail = this.findNameByEmail.bind(this);
     this.scrollDown = this.scrollDown.bind(this);
     this.getRef = this.getRef.bind(this);
   }
@@ -72,23 +73,14 @@ class HomePage extends React.Component {
     if (!this.state.message.trim())
       return;
 
-    this.setState({sending: true});
-
-    this.props.actions.sendAMessage(
+    messageApi.sendMessage(
       {
         sender: this.props.userInfo.email,
         content: this.state.message,
-        receiver: this.state.chattingWith.email
+        receiver: this.state.chattingWith.id
+        //todo change id = email
       }
-      // this.props.userInfo.friends.find(friend => friend.id === this.state.chattingWith.id).read
-    )
-      .then(() => {
-        this.setState({message: '', sending: false});
-      })
-      .catch((err) => {
-        console.log("sending fail", err);
-        this.setState({message: '', sending: false});
-      });
+    );
     this.textarea.value = '';
   }
 
@@ -102,8 +94,13 @@ class HomePage extends React.Component {
     this.setState({showLanguagePanel: false})
   }
 
-  findNameById(id) {
-    this.setState({chattingWith: {id: id, name: this.props.userInfo.friends.find((friend) => id === friend.id).name}});
+  findNameByEmail(email) {
+    this.setState({
+      chattingWith: {
+        id: email,
+        name: this.props.userInfo.friends.find((friend) => email === friend.email).name
+      }
+    });
   }
 
   render() {
@@ -115,7 +112,7 @@ class HomePage extends React.Component {
       <div className="main">
         <div className="mainInner">
           <div className="fuckingInner" style={{"height": "100%"}}>
-            <Panel changeParentChattingWith={this.findNameById}/>
+            <Panel changeParentChattingWith={this.findNameByEmail}/>
             {
               this.state.chattingWith &&
               <div id="chatArea" className="box chat">

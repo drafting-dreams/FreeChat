@@ -38,32 +38,15 @@ passport.use(new LocalStrategy(
 ));
 passport.serializeUser(function (user, done) {
   logger.info('serialize called');
-  done(null, user);
+  done(null, user._id);
 });
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser(function (id, done) {
   logger.info('deserialize called');
-  // memberShip.findUserById(id, function (err, user) {
-  done(null, user);
-  // });
+  memberShip.findUserById(id, function (err, user) {
+    done(null, user);
+  });
 });
 
-
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-app.use(
-  session(
-    {
-      secret: "forever321",
-      resave: false,
-      saveUninitialized: true,
-      cookie: {
-        // maxAge: 1000 * 60 * 60
-      }
-    }
-  )
-);
-app.use(passport.initialize());
-app.use(passport.session());
 
 if (isDev) {
   // static assets served by webpack-dev-middleware & webpack-hot-middleware for development
@@ -93,6 +76,25 @@ if (isDev) {
   app.use(express.static(path.join(__dirname, './dist/')));
 }
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(
+  session(
+    {
+      secret: "forever321",
+      saveUninitialized: false,
+      resave: false,
+      name: 'freechat.sid',
+      cookie: {
+        // maxAge: 1000 * 60 * 60
+      }
+    }
+  )
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(function (req, res, next) {
   logger.info(req.url);
   logger.info("req.body", req.body);
@@ -119,7 +121,6 @@ app.use(function (err, req, res) {
   res.sender('error');
 });
 
-console.log(app._router.stack)
 
 app.listen(3000, function () {
   console.log("app start");

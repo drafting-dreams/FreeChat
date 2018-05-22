@@ -17,8 +17,8 @@ export function receiveFriendStateSuccess(friendState) {
   return {type: types.RECEIVE_FRIEND_STATE_SUCCESS, friendState};
 }
 
-export function updateFriendState(updateFriend) {
-  return {type: types.UPDATE_FRIEND_LIST, updateFriend};
+export function updateFriendList(friedns) {
+  return {type: types.UPDATE_FRIEND_LIST, friends: friedns};
 }
 
 export function emptyMessageList() {
@@ -29,23 +29,19 @@ export function lenMessageList(friend, addon) {
   return {type: types.ADD_LENGTH, friend, addon};
 }
 
-export function sendAMessage(message, read) {
-  return function(dispatch) {
-    return messageApi.sendMessage(message, read).then(message => {
-      dispatch(sendSuccess(message));
-    }).catch(err => {throw err});
-  };
+export function sendAMessage(message) {
+  return messageApi.sendMessage(message);
 }
 
 export function receiveAMessage(message) {
-  return function(dispatch) {
-      const propertyNames = Object.getOwnPropertyNames(message);
-      if(propertyNames.includes("friendState"))
-        dispatch(receiveFriendStateSuccess(message));
-      else if(propertyNames.includes('updateFriendId'))
-        dispatch(updateFriendState(message));
-      else
-        dispatch(receiveMessageSuccess(message));
+  return function (dispatch) {
+    const propertyNames = Object.getOwnPropertyNames(message);
+    if (propertyNames.includes("friendState"))
+      dispatch(receiveFriendStateSuccess(message));
+    else if (propertyNames.includes('updateFriendId'))
+      dispatch(updateFriendList(message));
+    else
+      dispatch(receiveMessageSuccess(message));
   };
   // return function(dispatch) {
   //   return messageApi.listening(message).then(message => {
@@ -53,7 +49,7 @@ export function receiveAMessage(message) {
   //     if(propertyNames.includes("friendState"))
   //       dispatch(receiveFriendStateSuccess(message));
   //     else if(propertyNames.includes('updateFriendId'))
-  //       dispatch(updateFriendState(message));
+  //       dispatch(updateFriendList(message));
   //     else
   //       dispatch(receiveMessageSuccess(message));
   //   }).catch(err => {throw err});
@@ -61,17 +57,21 @@ export function receiveAMessage(message) {
 }
 
 export function getRecentHistory(user, friend, end) {
-  return function(dispatch) {
-    return messageApi.getRecentUnreadMessage(user, friend, end).then(recentObj=> {
+  return function (dispatch) {
+    return messageApi.getRecentUnreadMessage(user, friend, end).then(recentObj => {
       dispatch(getHistorySuccess(recentObj));
-    }).catch(err => {throw err});
+    }).catch(err => {
+      throw err
+    });
   };
 }
 
 export function getHistory(user, friend, end) {
-  return function(dispatch) {
-    return messageApi.getHistoryMessage(user, friend, end).then(recentObj=> {
+  return function (dispatch) {
+    return messageApi.getHistoryMessage(user, friend, end).then(recentObj => {
       dispatch(getHistorySuccess(recentObj));
-    }).catch(err => {throw err});
+    }).catch(err => {
+      throw err
+    });
   };
 }
