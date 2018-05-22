@@ -2,24 +2,22 @@ const store = require("./socketStore");
 const messenger = require("./messenger");
 const logger = require("../utils/getLogger");
 
-const socketToId = {};
-
 function hookUpEvent(wss) {
   wss.on('connection', function (ws) {
     ws.send(JSON.stringify({connected: true}));
     ws.on('message', function (data) {
       const message = JSON.parse(data);
-      logger.debug("socket receive ", message);
+      logger.debug(`socket receive `, message);
 
       switch (message.type) {
         case "init": {
-          socketToId[ws] = message.email;
+          ws.email = message.email;
           storeSocket(ws, message.email);
           break;
         }
 
         case "changeLanguage": {
-          changeLanguage(socketToId[ws], message.language);
+          changeLanguage(ws.email, message.language);
           break;
         }
 
@@ -37,6 +35,7 @@ function storeSocket(ws, id) {
 }
 
 function changeLanguage(id, lan) {
+  logger.debug(`change ${id}'s language to ${lan}`);
   const conf = store.get(id);
   conf.language = lan;
 }

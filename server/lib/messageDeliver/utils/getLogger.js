@@ -3,19 +3,19 @@ const {combine, prettyPrint, printf} = format;
 
 
 const myFormat = printf(info => {
-  const stringifiedRest = info.toString();
+  const stringifiedRest = JSON.stringify(info);
 
-  return `[${info.level}][messageDeliver]: ${JSON.stringify(info.message)}  ${stringifiedRest.length > 2 ? stringifiedRest:''}`;
+  return `[${info.level}][messageDeliver]: ${JSON.stringify(info.message)}  ${stringifiedRest.length > 2 ? stringifiedRest : ''}`;
 });
 const logger = createLogger({
   level: 'debug',
   format: combine(
-    format.colorize(),
-    // format.align(),
-    // format.json(),
-    prettyPrint(),
-    // format.simple()
-    myFormat
+      format.colorize(),
+      // format.align(),
+      // format.json(),
+      prettyPrint(),
+      // format.simple()
+      myFormat
   ),
   transports: [
     new transports.Console()

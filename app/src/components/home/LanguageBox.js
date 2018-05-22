@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as languageActions from '../../actions/languageActions';
+import languageApi from "../../api/languageApi";
 
 class LanguageBox extends React.Component {
   constructor(props, context) {
@@ -12,7 +13,8 @@ class LanguageBox extends React.Component {
   }
 
   switchLanguage(languageCode) {
-    this.props.actions.switchLanguage(languageCode);
+    languageApi.changeLanguage(languageCode);
+    this.props.switchLanguage(languageCode);
     this.props.removeLanguagePanel();
   }
 
@@ -22,74 +24,94 @@ class LanguageBox extends React.Component {
       <div className="languageBox">
         <div className="languageCol">
           <div className="flexCol">
-            {this.props.languages.slice(0, 7).map(language => {
-                return (
-                  language.code === this.props.languageCode ?
-                    <div className="btn languageSelector"
-                         style={{backgroundColor: "#aaa"}}
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div> :
-                    <div className="btn languageSelector"
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div>);
-              }
-            )}
+            {
+              this.props.languages.slice(0, 7).map(language => {
+                  return (
+                    language.code === this.props.languageCode ?
+                      <div className="btn languageSelector"
+                           style={{backgroundColor: "#aaa"}}
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}</div> :
+                      <div className="btn languageSelector"
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}</div>);
+                }
+              )
+            }
           </div>
         </div>
         <div className="languageCol">
           <div className="flexCol">
-            {this.props.languages.slice(7, 14).map(language =>{
-                return (
-                  language.code === this.props.languageCode ?
-                    <div className="btn languageSelector"
-                         style={{backgroundColor: "#aaa"}}
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div> :
-                    <div className="btn languageSelector"
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div>);
-              }
-            )}
+            {
+              this.props.languages.slice(7, 14).map(language => {
+                  return (
+                    language.code === this.props.languageCode
+                      ?
+                      <div key={language.code}
+                           className="btn languageSelector"
+                           style={{backgroundColor: "#aaa"}}
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}</div>
+                      :
+                      <div key={language.code}
+                           className="btn languageSelector"
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}</div>);
+                }
+              )
+            }
           </div>
         </div>
         <div className="languageCol">
           <div className="flexCol">
-            {this.props.languages.slice(14, 21).map(language =>{
-                return (
-                  language.code === this.props.languageCode ?
-                    <div className="btn languageSelector"
-                         style={{backgroundColor: "#aaa"}}
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div> :
-                    <div className="btn languageSelector"
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div>);
-              }
-            )}
+            {
+              this.props.languages.slice(14, 21).map(language => {
+                  return (
+                    language.code === this.props.languageCode
+                      ?
+                      <div key={language.code} className="btn languageSelector"
+                           style={{backgroundColor: "#aaa"}}
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}</div>
+                      :
+                      <div key={language.code} className="btn languageSelector"
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}</div>);
+                }
+              )
+            }
           </div>
         </div>
         <div className="languageCol">
           <div className="flexCol">
-            {this.props.languages.slice(21).map(language =>{
-                return (
-                  language.code === this.props.languageCode ?
-                    <div className="btn languageSelector"
-                         style={{backgroundColor: "#aaa"}}
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div> :
-                    <div className="btn languageSelector"
-                         onClick={() => {
-                           this.switchLanguage(language.code)
-                         }}>{language.language}</div>);
-              }
-            )}
+            {
+              this.props.languages.slice(21).map(language => {
+                  return (
+                    language.code === this.props.languageCode
+                      ?
+                      <div key={language.code}
+                           className="btn languageSelector"
+                           style={{backgroundColor: "#aaa"}}
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}</div>
+                      :
+                      <div key={language.code}
+                           className="btn languageSelector"
+                           onClick={() => {
+                             this.switchLanguage(language.code)
+                           }}>{language.language}
+                      </div>
+                  );
+                }
+              )
+            }
           </div>
         </div>
       </div>
@@ -102,7 +124,7 @@ class LanguageBox extends React.Component {
 LanguageBox.propTypes = {
   languages: PropTypes.array.isRequired,
   removeLanguagePanel: PropTypes.func.isRequired,
-  actions: PropTypes.object.isRequired,
+  switchLanguage: PropTypes.func.isRequired,
   languageCode: PropTypes.string.isRequired,
 };
 
@@ -115,7 +137,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(languageActions, dispatch)
+    switchLanguage: languageCode => dispatch(languageActions.switchLanguage(languageCode))
   };
 }
 

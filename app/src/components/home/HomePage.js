@@ -78,7 +78,6 @@ class HomePage extends React.Component {
         sender: this.props.userInfo.email,
         content: this.state.message,
         receiver: this.state.chattingWith.id
-        //todo change id = email
       }
     );
     this.textarea.value = '';

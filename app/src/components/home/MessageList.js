@@ -43,19 +43,14 @@ class MessageList extends React.Component {
     const user = this.props.userInfo;
     const friend = this.props.chattingWith;
     const item = this.props.messages.filter(message => message.friendId === friend.id);
+
     return (
       <div>
-        {item.length > 0 && item[0].end > 0 ?
-          <div>
-            <div className="smallTip" onClick={this.getHistoryMessage}>查看更多消息</div>
-          </div> : null
-        }
         {
           this.props.messages.length > 0 && item.length > 0 ?
-
             //.messageContents.map(message =>
             item[0].messageContents.map(message =>
-              <div>
+              <div key={Math.random()}>
                 <div className="clearFix">
                   <div>
                     <div className={"message " + (message.sender === user.id ? 'me' : 'friend')}>

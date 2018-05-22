@@ -29,10 +29,12 @@ export function lenMessageList(friend, addon) {
   return {type: types.ADD_LENGTH, friend, addon};
 }
 
+//todo deprecated
 export function sendAMessage(message) {
   return messageApi.sendMessage(message);
 }
 
+//todo deprecated
 export function receiveAMessage(message) {
   return function (dispatch) {
     const propertyNames = Object.getOwnPropertyNames(message);

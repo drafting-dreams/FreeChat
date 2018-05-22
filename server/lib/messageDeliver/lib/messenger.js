@@ -15,14 +15,16 @@ function sendMessage(arg) {
 
   const message = {...arg};
   if (senderConf.language !== receiverConf.language) {
+    logger.debug(`translate ${senderConf.language} to ${receiverConf.language}`);
     translator(arg.content, senderConf.language, receiverConf.language)
-      .then(translated => {
-        message.translated = translated;
-        _sendAndSaveMessage(message, receiverConf.socket);
-      })
-      .catch(err => {
-        console.error("translate error: ", err);
-      });
+        .then(translated => {
+          message.translated = translated;
+          logger.debug(`translated message ${translated}`);
+          _sendAndSaveMessage(message, receiverConf.socket);
+        })
+        .catch(err => {
+          console.error("translate error: ", err);
+        });
   } else {
     _sendAndSaveMessage(message, receiverConf.socket);
   }
@@ -31,7 +33,13 @@ function sendMessage(arg) {
 function _sendAndSaveMessage(message, ws) {
   _saveMessage(message, 'sent');
 
-  const m = {content: message.content, translated: message.translated};
+  const m = {
+    type: "messaging",
+    sender: message.sender,
+    receiver: message.receiver,
+    content: message.content,
+    translated: message.translated
+  };
   ws.send(JSON.stringify(m));
 }
 
