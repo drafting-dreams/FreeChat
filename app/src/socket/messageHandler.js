@@ -1,4 +1,4 @@
-import {receiveMessageSuccess} from "../actions/messageActions";
+import {receiveMessageSuccess, getHistorySuccess} from "../actions/messageActions";
 import store from '../store/configureStore';
 
 export default function handler(message) {
@@ -7,5 +7,12 @@ export default function handler(message) {
       store.dispatch(dispatch => dispatch(receiveMessageSuccess(message)));
       break;
     }
+
+    case "historyMessage": {
+      store.dispatch(dispatch => dispatch(getHistorySuccess({
+        friend: message.receiver, history: message.messages
+      })));
+    }
+
   }
 }

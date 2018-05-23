@@ -1,6 +1,7 @@
 const store = require("./socketStore");
 const messenger = require("./messenger");
 const logger = require("../utils/getLogger");
+const messageStorage = require("../../messageStorage/index");
 
 function hookUpEvent(wss) {
   wss.on('connection', function (ws) {
@@ -25,6 +26,18 @@ function hookUpEvent(wss) {
           messenger.sendMessage(message);
           break;
         }
+
+        case "getHistory": {
+          messageStorage.getHistoryMessage(message.sender, message.receiver)
+              .then(messages => {
+                ws.send(JSON.stringify({
+                  type: "historyMessage", messages,
+                  sender: message.sender,
+                  receiver: message.receiver
+                }));
+              })
+        }
+
       }
     })
   })

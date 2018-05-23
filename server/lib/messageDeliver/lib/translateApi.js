@@ -22,7 +22,7 @@ module.exports = function translateApi(message, from, to) {
         q: query,
         appid: appid,
         salt: salt,
-        from: from,
+        from: 'auto',
         to: to,
         sign: sign
       }

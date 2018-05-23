@@ -7,37 +7,22 @@ import * as messageActions from '../../actions/messageActions';
 class MessageList extends React.Component {
   constructor(props) {
     super(props);
-
-    // this.state = {
-    //   user: this.props.userInfo,
-    //   item: this.props.messages.filter(message => message.friendId === this.props.chattingWith.id),
-    // };
-
-    this.getHistoryMessage = this.getHistoryMessage.bind(this);
   }
 
 
   //componentDidUpdate message length management
   componentDidUpdate(prevProps) {
-    console.groupEnd("message will update");
-    const item = this.props.messages.filter(message => message.friendId === this.props.chattingWith.id);
-    if ((item.length > 0 && (item[0].messageContents.length > item[0].messageListLength)) ||
-      prevProps.chattingWith.id !== this.props.chattingWith.id) {
-      if (item.length > 0 && (item[0].messageContents.length > item[0].messageListLength)) {
-        this.props.actions.lenMessageList(this.props.chattingWith.id, item[0].messageContents.length - item[0].messageListLength);
-      }
-    }
     this.props.scrollDown();
+  }
+
+  componentDidMount() {
   }
 
   componentWillUnmount() {
     console.log("message un mount");
   }
 
-  getHistoryMessage() {
-    const item = this.props.messages.filter(message => message.friendId === this.props.chattingWith.id);
-    this.props.actions.getHistory(this.props.userInfo.id, this.props.chattingWith.id, item[0].end);
-  }
+
 
   render() {
     const user = this.props.userInfo;
@@ -47,19 +32,23 @@ class MessageList extends React.Component {
     return (
       <div>
         {
-          this.props.messages.length > 0 && item.length > 0 ?
-            //.messageContents.map(message =>
+          this.props.messages.length > 0 && item.length > 0
+            ?
             item[0].messageContents.map(message =>
               <div key={Math.random()}>
                 <div className="clearFix">
                   <div>
-                    <div className={"message " + (message.sender === user.id ? 'me' : 'friend')}>
-                      <img className="avatar" src={"../../static/" + message.sender + ".jpeg"}/>
+                    <div className={"message " + (message.sender === user.email ? 'me' : 'friend')}>
+                      <i className="avatar far fa-user"/>
                       <div className="content">
-                        <div className={"bubble bubblePrimary " + (message.sender === user.id ? 'right' : 'left')}>
+                        <div className={"bubble bubblePrimary " + (message.sender === user.email ? 'right' : 'left')}>
                           <div className="bubbleCont">
                             <div className="plain">
-                              <pre>{message.content}</pre>
+                              {
+                                message.translated &&
+                                <pre className="translated">{message.translated}</pre>
+                              }
+                              <pre className="origin">{message.content}</pre>
                             </div>
                           </div>
                         </div>
@@ -68,13 +57,16 @@ class MessageList extends React.Component {
                   </div>
                 </div>
               </div>
-            ) : null}
-        {this.props.sending && (
+            )
+            : null
+        }
+        {
+          this.props.sending &&
           <div>
             <div className="clearFix">
               <div>
                 <div className="message me">
-                  <img className="avatar" src={"../../static/" + user.id + ".jpeg"}/>
+                  <i className="avatar far fa-user"/>
                   <div className="content">
                     <div className="bubble bubblePrimary right">
                       <div className="bubbleCont">
@@ -89,7 +81,7 @@ class MessageList extends React.Component {
               </div>
             </div>
           </div>
-        )}
+        }
       </div>
     );
   }

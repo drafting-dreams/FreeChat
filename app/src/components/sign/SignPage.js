@@ -27,19 +27,25 @@ class SignPage extends React.Component {
     this.signUp = this.signUp.bind(this);
     this.updateUserInfo = this.updateUserInfo.bind(this);
     this.redirect = this.redirect.bind(this);
+    this.changePanel = this.changePanel.bind(this);
   }
 
   componentDidMount() {
     userApi
       .getUserInfo()
       .then(user => {
+        console.log("got user ", user);
         if (user.email) {
-          this.props.actions.signInSuccess({name: user.name, email: user.email});
+          this.props.actions.signInSuccess({name: user.username, email: user.email});
           this.redirect(user.email);
         } else {
           this.setState({signingIn: false});
         }
       });
+  }
+
+  changePanel() {
+    this.setState({signState: this.state.signState === 'signIn' ? 'signUp' : 'signIn'});
   }
 
   signIn(e) {
@@ -52,7 +58,7 @@ class SignPage extends React.Component {
       .signIn({email: user.email, password: user.password})
       .then(res => {
         if (res.logged) {
-          this.props.actions.signInSuccess({email: res.email, name: res.name});
+          this.props.actions.signInSuccess({email: res.email, name: res.username});
           this.redirect(res.email);
         } else {
           //todo show toastr
@@ -66,7 +72,13 @@ class SignPage extends React.Component {
     userApi
       .signUp(user)
       .then(res => {
-        //todo check result
+        console.log(res);
+        if (res.success) {
+          // this.props.actions.signInSuccess({email: res.email, name: res.username});
+          this.setState({signState: 'signIn'});
+        } else {
+          //todo show toastr
+        }
       });
   }
 
@@ -92,7 +104,7 @@ class SignPage extends React.Component {
         <div className="signContainer">
           <h1 className="signTitle">FreeChat</h1>
           <form className="form">
-            <input type="text" name="email"
+            <input type="email" name="email"
                    onChange={this.updateUserInfo}
                    value={this.state.user.email}
                    autoComplete="off"
@@ -112,6 +124,7 @@ class SignPage extends React.Component {
                    name="password"
                    onChange={this.updateUserInfo}
                    value={this.state.user.password}
+                   autoComplete="new-password"
                    placeholder="Password"/>
 
 
@@ -121,7 +134,7 @@ class SignPage extends React.Component {
                      name="confirm"
                      onChange={this.updateUserInfo}
                      value={this.state.user.confirm}
-                     autoComplete="off"
+                     autoComplete="new-password"
                      placeholder="confirm"/>
             }
 
@@ -133,9 +146,13 @@ class SignPage extends React.Component {
 
             <div className="smallTip"
                  style={{color: "white", fontSize: '17px', marginTop: "20px"}}
-                 onClick={() => this.setState({signState: 'signUp'})}
+                 onClick={this.changePanel}
             >
-              don't have an account?
+              {
+                this.state.signState === 'signUp'
+                  ? "sign in"
+                  : "don't have an account?"
+              }
             </div>
           </form>
         </div>

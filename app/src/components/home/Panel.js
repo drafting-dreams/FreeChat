@@ -7,6 +7,8 @@ import socket from '../../socket/socket';
 import * as messageActions from '../../actions/messageActions';
 import ContactSearcher from "./ContactSearcher";
 import api from "../../api/contactApi";
+import messageApi from "../../api/messageApi";
+
 
 class Panel extends React.Component {
   constructor(props, context) {
@@ -34,19 +36,23 @@ class Panel extends React.Component {
     // this.sock.send(JSON.stringify({type: 'otherId', otherId: email}));
 
     this.setState({selected: email});
-
     this.props.changeParentChattingWith(email);
-    //todo load history message
-    this.props.actions.getRecentHistory(this.props.userInfo.email, email);
+    this.getHistoryMessage(email);
+  }
+
+  getHistoryMessage(email) {
+    console.log("get history message");
+    messageApi.getHistoryMessage(this.props.userInfo.email, email);
   }
 
   render() {
     const user = this.props.userInfo;
+    console.log(user);
     return (
       <div className="panel">
         <div className="panelHeader">
           <div className="avatar">
-            <img src={"../../static/" + user.id + ".jpeg"}/>
+            <img src={`https://ui-avatars.com/api/?name=${user.name}`}/>
           </div>
           <div className="info">
             <h3 className="nickName">
@@ -67,7 +73,7 @@ class Panel extends React.Component {
                      }}
                 >
                   <div className="avatar">
-                    <img src={"../../static/" + friend.id + ".jpeg"}/>
+                    <img src={`https://ui-avatars.com/api/?name=${friend.name}`}/>
                   </div>
                   <div className="info">
                     <h3 className="nickName"><span className="nickNameText">{friend.name}</span></h3>

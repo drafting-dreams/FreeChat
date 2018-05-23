@@ -17,6 +17,11 @@ function updateAllUnsentMessage(arg) {
   return messageManager.updateAllUnsentMessage(arg)
 }
 
-module.exports = {saveMessage, getMessage, updateAllUnsentMessage};
+function getHistoryMessage(sender, receiver) {
+  logger.info(`get history message from ${sender} to ${receiver}`);
+  return messageManager.getHistoryMessage(sender, receiver);
+}
+
+module.exports = {saveMessage, getMessage, updateAllUnsentMessage, getHistoryMessage};
 
 

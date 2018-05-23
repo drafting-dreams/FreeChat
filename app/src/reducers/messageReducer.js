@@ -5,17 +5,17 @@ import * as types from '../constants/actionTypes';
 
 export default function messageReducer(state = initialState.messages, action) {
   let tempState;
-  let messageItem;
+  let messageItemIndex;
 
   switch (action.type) {
     case(types.SEND_SUCCESS): {
       tempState = state.slice();
-      messageItem = state.findIndex(item => item.friendId === action.message.receiver);
-      if (messageItem !== -1) {
-        tempState[messageItem] = {...tempState[messageItem]};
-        const tempContents = tempState[messageItem].messageContents.slice();
-        tempState[messageItem].messageListLength = tempState[messageItem].messageListLength + 1;
-        tempState[messageItem].messageContents = [...tempContents, action.message];
+      messageItemIndex = state.findIndex(item => item.friendId === action.message.receiver);
+
+      if (messageItemIndex !== -1) {
+        const messageObj = tempState[messageItemIndex] = {...tempState[messageItemIndex]};
+        messageObj.messageListLength = tempState[messageItemIndex].messageListLength + 1;
+        messageObj.messageContents = [...tempState[messageItemIndex].messageContents, action.message];
       } else {
         tempState.push({
           end: -1,
@@ -29,12 +29,12 @@ export default function messageReducer(state = initialState.messages, action) {
 
     case(types.RECEIVE_MESSAGE_SUCCESS): {
       tempState = state.slice();
-      messageItem = state.findIndex(item => item.friendId === action.message.sender);
-      if (messageItem !== -1) {
-        tempState[messageItem] = {...tempState[messageItem]};
-        tempState[messageItem].messageListLength = tempState[messageItem].messageListLength + 1;
-        const tempContents = tempState[messageItem].messageContents.slice();
-        tempState[messageItem].messageContents = [...tempContents, action.message];
+      messageItemIndex = state.findIndex(item => item.friendId === action.message.sender);
+      if (messageItemIndex !== -1) {
+        tempState[messageItemIndex] = {...tempState[messageItemIndex]};
+        tempState[messageItemIndex].messageListLength = tempState[messageItemIndex].messageListLength + 1;
+        const tempContents = tempState[messageItemIndex].messageContents.slice();
+        tempState[messageItemIndex].messageContents = [...tempContents, action.message];
       } else {
         tempState.push({
           end: -1,
@@ -48,21 +48,19 @@ export default function messageReducer(state = initialState.messages, action) {
 
     case(types.GET_HISTORY_SUCCESS): {
       tempState = state.slice();
-      messageItem = state.findIndex(item => item.friendId === action.recentObj.friend);
-      if (messageItem !== -1) {
-        const tempContents = tempState[messageItem].messageContents.slice();
-        tempContents.unshift(...action.recentObj.history.map(_mapHistoryMessage2LocalMessage));
-        tempState[messageItem] = {
-          end: action.recentObj.end, friendId: tempState[messageItem].friendId,
-          messageContents: tempContents, messageListLength: tempContents.length
-        };
-        //tempState[messageItem].messageContents.push(...action.recentObj.history.map(_mapHistoryMessage2LocalMessage));
-      } else {
-        tempState.unshift({
-          end: action.recentObj.end,
+      messageItemIndex = state.findIndex(item => item.friendId === action.recentObj.friend);
+      if (messageItemIndex !== -1) {
+        tempState[messageItemIndex] = {
           friendId: action.recentObj.friend,
           messageListLength: action.recentObj.history.length,
-          messageContents: [...action.recentObj.history.map(_mapHistoryMessage2LocalMessage)]
+          messageContents: [...action.recentObj.history]
+        };
+
+      } else {
+        tempState.unshift({
+          friendId: action.recentObj.friend,
+          messageListLength: action.recentObj.history.length,
+          messageContents: [...action.recentObj.history]
         });
       }
       return tempState;
@@ -72,8 +70,4 @@ export default function messageReducer(state = initialState.messages, action) {
     default:
       return state;
   }
-}
-
-function _mapHistoryMessage2LocalMessage(historyMessage) {
-  return {sender: historyMessage.from, content: historyMessage.content, receiver: historyMessage.to};
 }

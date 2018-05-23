@@ -73,13 +73,15 @@ class HomePage extends React.Component {
     if (!this.state.message.trim())
       return;
 
-    messageApi.sendMessage(
-      {
-        sender: this.props.userInfo.email,
-        content: this.state.message,
-        receiver: this.state.chattingWith.id
-      }
-    );
+    const message = {
+      sender: this.props.userInfo.email,
+      content: this.state.message,
+      receiver: this.state.chattingWith.id
+    };
+
+    messageApi.sendMessage(message);
+
+    this.props.actions.sendSuccess(message);
     this.textarea.value = '';
   }
 

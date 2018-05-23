@@ -29,35 +29,6 @@ export function lenMessageList(friend, addon) {
   return {type: types.ADD_LENGTH, friend, addon};
 }
 
-//todo deprecated
-export function sendAMessage(message) {
-  return messageApi.sendMessage(message);
-}
-
-//todo deprecated
-export function receiveAMessage(message) {
-  return function (dispatch) {
-    const propertyNames = Object.getOwnPropertyNames(message);
-    if (propertyNames.includes("friendState"))
-      dispatch(receiveFriendStateSuccess(message));
-    else if (propertyNames.includes('updateFriendId'))
-      dispatch(updateFriendList(message));
-    else
-      dispatch(receiveMessageSuccess(message));
-  };
-  // return function(dispatch) {
-  //   return messageApi.listening(message).then(message => {
-  //     const propertyNames = Object.getOwnPropertyNames(message);
-  //     if(propertyNames.includes("friendState"))
-  //       dispatch(receiveFriendStateSuccess(message));
-  //     else if(propertyNames.includes('updateFriendId'))
-  //       dispatch(updateFriendList(message));
-  //     else
-  //       dispatch(receiveMessageSuccess(message));
-  //   }).catch(err => {throw err});
-  // };
-}
-
 export function getRecentHistory(user, friend, end) {
   return function (dispatch) {
     return messageApi.getRecentUnreadMessage(user, friend, end).then(recentObj => {
