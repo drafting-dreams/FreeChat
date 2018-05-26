@@ -8,6 +8,7 @@ import path from 'path';
 
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('production'),
+  ws_address: ("'ws://localhost:1337'"),
   __DEV__: false
 };
 
