@@ -29,13 +29,13 @@ function hookUpEvent(wss) {
 
         case "getHistory": {
           messageStorage.getHistoryMessage(message.sender, message.receiver)
-              .then(messages => {
-                ws.send(JSON.stringify({
-                  type: "historyMessage", messages,
-                  sender: message.sender,
-                  receiver: message.receiver
-                }));
-              })
+            .then(messages => {
+              ws.send(JSON.stringify({
+                type: "historyMessage", messages,
+                sender: message.sender,
+                receiver: message.receiver
+              }));
+            })
         }
 
       }

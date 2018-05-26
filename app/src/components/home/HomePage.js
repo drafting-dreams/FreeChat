@@ -122,7 +122,7 @@ class HomePage extends React.Component {
                 </div>
                 <div className="scrollWrapper boxBd" style={{"position": "absolute"}}>
                   <div className="boxBd scrollbarDynamic scrollContent"
-                       style={{marginBottom: "0", marginRight: "0", height: "421px"}}
+                       style={{marginBottom: "0", marginRight: "0", height: "100%"}}
                        ref={this.getRef}
                   >
                     <Dialogue newMessage={this.state.message}

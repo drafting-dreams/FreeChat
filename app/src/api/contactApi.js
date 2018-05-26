@@ -11,7 +11,6 @@ function addContact(email) {
 
 function getContact() {
   return $.get("/api/contact/getContacts");
-
 }
 
 export default {findUserByEmail, addContact, getContact}

@@ -23,7 +23,6 @@ class MessageList extends React.Component {
   }
 
 
-
   render() {
     const user = this.props.userInfo;
     const friend = this.props.chattingWith;
@@ -45,10 +44,11 @@ class MessageList extends React.Component {
                           <div className="bubbleCont">
                             <div className="plain">
                               {
-                                message.translated &&
+                                message.translated && message.translated !== message.content &&
                                 <pre className="translated">{message.translated}</pre>
                               }
-                              <pre className="origin">{message.content}</pre>
+                              <pre
+                                className={`origin ${(message.translated && message.translated !== message.content) ? '' : 'big'}`}>{message.content}</pre>
                             </div>
                           </div>
                         </div>

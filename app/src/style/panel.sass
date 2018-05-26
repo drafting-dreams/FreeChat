@@ -46,7 +46,7 @@
 .chatItem
   overflow: hidden
   padding: 12px 18px 11px
-  border-bottom: 1px solid #292c33
+  margin-bottom: 5px
   cursor: pointer
   position: relative
 
@@ -64,10 +64,14 @@
     overflow: hidden
 
     .nickName
-      font-weight: 400
-      font-size: 13px
+      font-weight: bolder
+      font-size: 20px
       color: #fff
       line-height: 20px
+
+    .email
+      color: #ddd
+      font-style: italic
 
   .nickNameText
     display: inline-block
@@ -77,3 +81,6 @@
     text-overflow: ellipsis
     white-space: nowrap
     word-wrap: normal
+
+  &.active
+    border-right: 3px solid white

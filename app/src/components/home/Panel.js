@@ -67,7 +67,7 @@ class Panel extends React.Component {
               user.friends &&
               user.friends.map(friend => (
                 <div key={friend.email}
-                     className={"chatItem" + (this.state.selected === friend.id ? " active" : "")}
+                     className={"chatItem " + (this.state.selected === friend.email ? "active" : "")}
                      onClick={() => {
                        this.selectFriend(friend.email)
                      }}
@@ -76,7 +76,8 @@ class Panel extends React.Component {
                     <img src={`https://ui-avatars.com/api/?name=${friend.name}`}/>
                   </div>
                   <div className="info">
-                    <h3 className="nickName"><span className="nickNameText">{friend.name}</span></h3>
+                    <h3 className="nickName">{friend.name}</h3>
+                    <h6 className="email">{friend.email}</h6>
                   </div>
                 </div>
               ))
