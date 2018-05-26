@@ -8,7 +8,7 @@ let websocket = null;
 export default function getWebSocket(email) {
   if (!websocket) {
     return new Promise((resolve, reject) => {
-      websocket = new WebSocket("ws://localhost:1337");
+      websocket = new WebSocket(ws_address);
       websocket.addEventListener("message", function (event) {
         const m = JSON.parse(event.data);
         console.log("socket receive: ", JSON.parse(event.data));

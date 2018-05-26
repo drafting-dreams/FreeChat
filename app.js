@@ -89,6 +89,7 @@ app.use(
       name: 'freechat.sid',
       cookie: {
         // maxAge: 1000 * 60 * 60
+        // domain:"freechat.codeplay.fun"
       }
     }
   )
