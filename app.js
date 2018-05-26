@@ -12,6 +12,7 @@ const path = require("path");
 const isDev = process.env.NODE_ENV !== 'production';
 const historyApiFallback = require('connect-history-api-fallback');
 require("./server/lib/messageDeliver/index");
+const httpPort = process.env.HTTP_PORT;
 
 
 mongoose.connect(process.env.DB_STR).then(() => {
@@ -122,6 +123,6 @@ app.use(function (err, req, res) {
 });
 
 
-app.listen(3000, function () {
+app.listen(httpPort, function () {
   console.log("app start");
 });
