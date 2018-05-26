@@ -31,17 +31,17 @@ class SignPage extends React.Component {
   }
 
   componentDidMount() {
-    userApi
-      .getUserInfo()
-      .then(user => {
-        console.log("got user ", user);
-        if (user.email) {
-          this.props.actions.signInSuccess({name: user.username, email: user.email});
-          this.redirect(user.email);
-        } else {
-          this.setState({signingIn: false});
-        }
-      });
+    // userApi
+    //   .getUserInfo()
+    //   .then(user => {
+    //     console.log("got user ", user);
+    //     if (user.email) {
+    //       this.props.actions.signInSuccess({name: user.username, email: user.email});
+    //       this.redirect(user.email);
+    //     } else {
+    //       this.setState({signingIn: false});
+    //     }
+    //   });
   }
 
   changePanel() {
@@ -58,6 +58,7 @@ class SignPage extends React.Component {
       .signIn({email: user.email, password: user.password})
       .then(res => {
         if (res.logged) {
+          console.log("sign in success");
           this.props.actions.signInSuccess({email: res.email, name: res.username});
           this.redirect(res.email);
         } else {
