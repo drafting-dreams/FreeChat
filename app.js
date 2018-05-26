@@ -20,6 +20,7 @@ mongoose.connect(process.env.DB_STR).then(() => {
 });
 
 const app = express();
+app.set('trust proxy',1);
 
 passport.use(new LocalStrategy(
   {
@@ -90,6 +91,7 @@ app.use(
       cookie: {
         // maxAge: 1000 * 60 * 60
         // domain:"freechat.codeplay.fun"
+	httpOnly:false
       }
     }
   )

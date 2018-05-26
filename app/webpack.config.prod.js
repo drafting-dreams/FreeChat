@@ -8,7 +8,7 @@ import path from 'path';
 
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('production'),
-  ws_address: ("'ws://freechat.codeplay.fun:1337'"),
+  ws_address: ("'wss://chatsocket.codeplay.fun'"),
   __DEV__: false
 };
 

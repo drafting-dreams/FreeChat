@@ -9,6 +9,7 @@ export default {
         body: JSON.stringify(body),
         method: 'POST',
         headers: {
+	   Accept: 'application/json',
           'content-type': 'application/json'
         }
       }
