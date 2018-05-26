@@ -115,38 +115,39 @@ class HomePage extends React.Component {
           <div className="fuckingInner" style={{"height": "100%"}}>
             <Panel changeParentChattingWith={this.findNameByEmail}/>
             {
-              this.state.chattingWith &&
-              <div id="chatArea" className="box chat">
-                <div className="boxHead">
-                  <div className="titleWrapper">{this.state.chattingWith.name || "Chat without obstacle !!!"}</div>
-                </div>
-                <div className="scrollWrapper boxBd" style={{"position": "absolute"}}>
-                  <div className="boxBd scrollbarDynamic scrollContent"
-                       style={{marginBottom: "0", marginRight: "0", height: "100%"}}
-                       ref={this.getRef}
-                  >
-                    <Dialogue newMessage={this.state.message}
-                              sending={this.state.sending}
-                              chattingWith={this.state.chattingWith}
-                              scrollDown={this.scrollDown}
-                    />
+              this.state.chattingWith
+                ?
+                <div className="chatArea box chat">
+                  <div className="boxHead">
+                    <div className="titleWrapper">{this.state.chattingWith.name || "Chat without obstacle !!!"}</div>
                   </div>
-                </div>
-                <div className="boxFt">
-                  <div className="toolBar">
-                    <div role="button" className="btn languageBtn" onClick={() => {
-                      this.setState({showLanguagePanel: true})
-                    }}>{languageLabel}</div>
-                    {this.state.showLanguagePanel ? (
-                      <div>
-                        <div className="clickBoard" onClick={this.removeLanguagePanel}/>
-                        <div className="boxDecorator arrowShadow"/>
-                        <div className="boxDecorator arrow"/>
-                        <LanguageBox removeLanguagePanel={this.removeLanguagePanel}/>
-                      </div>) : null}
+                  <div className="scrollWrapper boxBd" style={{"position": "absolute"}}>
+                    <div className="boxBd scrollbarDynamic scrollContent"
+                         style={{marginBottom: "0", marginRight: "0", height: "100%"}}
+                         ref={this.getRef}
+                    >
+                      <Dialogue newMessage={this.state.message}
+                                sending={this.state.sending}
+                                chattingWith={this.state.chattingWith}
+                                scrollDown={this.scrollDown}
+                      />
+                    </div>
                   </div>
-                  <div className="content">
-                    <form style={{padding: 0}}>
+                  <div className="boxFt">
+                    <div className="toolBar">
+                      <div role="button" className="btn languageBtn" onClick={() => {
+                        this.setState({showLanguagePanel: true})
+                      }}>{languageLabel}</div>
+                      {this.state.showLanguagePanel ? (
+                        <div>
+                          <div className="clickBoard" onClick={this.removeLanguagePanel}/>
+                          <div className="boxDecorator arrowShadow"/>
+                          <div className="boxDecorator arrow"/>
+                          <LanguageBox removeLanguagePanel={this.removeLanguagePanel}/>
+                        </div>) : null}
+                    </div>
+                    <div className="content">
+                      <form style={{padding: 0}}>
                     <textarea autoComplete="off"
                               autoFocus="off"
                               id="textArea"
@@ -157,13 +158,21 @@ class HomePage extends React.Component {
                               ref={(textarea) => {
                                 this.textarea = textarea
                               }}/>
-                    </form>
-                  </div>
-                  <div className="action">
-                    <a className="btn btnSend" onClick={this.sendMessage}>Send</a>
+                      </form>
+                    </div>
+                    <div className="action">
+                      <a className="btn btnSend" onClick={this.sendMessage}>Send</a>
+                    </div>
                   </div>
                 </div>
-              </div>
+                :
+                <div className="chatArea box chat">
+                  <div id="blank-chat-area">
+                    <div id="logo">
+                      FreeChat
+                    </div>
+                  </div>
+                </div>
             }
           </div>
         </div>

@@ -1,22 +1,10 @@
+import $ from "jquery";
+
 export default {
   get: function (url) {
-    return fetch(url)
-      .then(res => res.json());
+    return $.get(url);
   },
   post: function (url, body) {
-    return fetch(url,
-      {
-        body: JSON.stringify(body),
-        method: 'POST',
-        headers: {
-	   Accept: 'application/json',
-          'content-type': 'application/json'
-        }
-      }
-    )
-      .then(res => {
-        return res.json();
-      })
-
+    return $.post(url, body);
   }
 }
