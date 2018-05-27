@@ -16,7 +16,6 @@ class App extends React.Component {
     userApi
       .getUserInfo()
       .then(user => {
-        console.log("get user ", user)
         if (user.email) {
           store.dispatch(d => d(signActions.signInSuccess({name: user.username, email: user.email})));
           store.dispatch(d => d(push(`/home/${user.email}`)));

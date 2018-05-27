@@ -22,6 +22,7 @@ class Panel extends React.Component {
   }
 
   componentDidMount() {
+    console.log("get contacts");
     this.getFriends();
   }
 
@@ -47,7 +48,6 @@ class Panel extends React.Component {
 
   render() {
     const user = this.props.userInfo;
-    console.log(user);
     return (
       <div className="panel">
         <div className="panelHeader">

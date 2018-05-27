@@ -11,7 +11,7 @@ class MessageList extends React.Component {
 
 
   //componentDidUpdate message length management
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     this.props.scrollDown();
   }
 
@@ -38,7 +38,9 @@ class MessageList extends React.Component {
                 <div className="clearFix">
                   <div>
                     <div className={"message " + (message.sender === user.email ? 'me' : 'friend')}>
-                      <i className="avatar far fa-user"/>
+                      {/*<i className="avatar far fa-user"/>*/}
+                      <img className="avatar"
+                           src={`https://ui-avatars.com/api/?name=${message.sender === user.email ? user.name : this.props.chattingWith.name}`}/>
                       <div className="content">
                         <div className={"bubble bubblePrimary " + (message.sender === user.email ? 'right' : 'left')}>
                           <div className="bubbleCont">
