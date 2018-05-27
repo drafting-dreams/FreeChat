@@ -40,7 +40,7 @@ class MessageList extends React.Component {
                     <div className={"message " + (message.sender === user.email ? 'me' : 'friend')}>
                       {/*<i className="avatar far fa-user"/>*/}
                       <img className="avatar"
-                           src={`https://ui-avatars.com/api/?name=${message.sender === user.email ? user.name : this.props.chattingWith.name}`}/>
+                           src={`https://ui-avatars.com/api/?length=1&name=${message.sender === user.email ? user.name : this.props.chattingWith.name}`}/>
                       <div className="content">
                         <div className={"bubble bubblePrimary " + (message.sender === user.email ? 'right' : 'left')}>
                           <div className="bubbleCont">

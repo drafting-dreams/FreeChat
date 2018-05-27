@@ -52,7 +52,7 @@ class Panel extends React.Component {
       <div className="panel">
         <div className="panelHeader">
           <div className="avatar">
-            <img src={`https://ui-avatars.com/api/?name=${user.name}`}/>
+            <img src={`https://ui-avatars.com/api/?length=1&name=${user.name}`}/>
           </div>
           <div className="info">
             <h3 className="nickName">
@@ -74,7 +74,7 @@ class Panel extends React.Component {
                      }}
                 >
                   <div className="avatar">
-                    <img src={`https://ui-avatars.com/api/?name=${friend.name}`}/>
+                    <img src={`https://ui-avatars.com/api/?length=1&name=${friend.name}`}/>
                   </div>
                   <div className="info">
                     <h3 className="nickName">{friend.name}</h3>
