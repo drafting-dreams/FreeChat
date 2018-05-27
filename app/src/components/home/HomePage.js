@@ -82,6 +82,7 @@ class HomePage extends React.Component {
     messageApi.sendMessage(message);
 
     this.props.actions.sendSuccess(message);
+    this.setState({message: ''});
     this.textarea.value = '';
   }
 
@@ -157,7 +158,8 @@ class HomePage extends React.Component {
                               onKeyDown={this.checkEnter}
                               ref={(textarea) => {
                                 this.textarea = textarea
-                              }}/>
+                              }}
+                    />
                       </form>
                     </div>
                     <div className="action">
