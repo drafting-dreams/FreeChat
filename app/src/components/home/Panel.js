@@ -67,6 +67,7 @@ class Panel extends React.Component {
               user.friends &&
               user.friends.map(friend => (
                 <div key={friend.email}
+                     id={friend.email}
                      className={"chatItem " + (this.state.selected === friend.email ? "active" : "")}
                      onClick={() => {
                        this.selectFriend(friend.email)
