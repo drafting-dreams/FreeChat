@@ -3,7 +3,8 @@ import store from '../store/configureStore';
 import $ from "jquery";
 
 function rippleEffect(id) {
-  const $that = $(`#${id}`);
+
+  const $that = $(document.getElementById(id));
   let posX = $that.offset().left,
     posY = $that.offset().top,
     buttonWidth = $that.width(),
