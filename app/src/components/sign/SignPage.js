@@ -7,6 +7,26 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as signActions from '../../actions/signActions';
 import userApi from '../../api/mockUserApi';
+import toastr from 'toastr';
+
+
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+};
 
 class SignPage extends React.Component {
   constructor(props, context) {
@@ -30,19 +50,6 @@ class SignPage extends React.Component {
     this.changePanel = this.changePanel.bind(this);
   }
 
-  componentDidMount() {
-    // userApi
-    //   .getUserInfo()
-    //   .then(user => {
-    //     console.log("got user ", user);
-    //     if (user.email) {
-    //       this.props.actions.signInSuccess({name: user.username, email: user.email});
-    //       this.redirect(user.email);
-    //     } else {
-    //       this.setState({signingIn: false});
-    //     }
-    //   });
-  }
 
   changePanel() {
     this.setState({signState: this.state.signState === 'signIn' ? 'signUp' : 'signIn'});
@@ -58,11 +65,10 @@ class SignPage extends React.Component {
       .signIn({email: user.email, password: user.password})
       .then(res => {
         if (res.logged) {
-          console.log("sign in success");
           this.props.actions.signInSuccess({email: res.email, name: res.username});
-          this.redirect(res.email);
+          setTimeout(() => this.redirect(res.email), 1000);
         } else {
-          //todo show toastr
+          toastr.error(res.message);
         }
       });
   }
@@ -76,9 +82,10 @@ class SignPage extends React.Component {
         console.log(res);
         if (res.success) {
           // this.props.actions.signInSuccess({email: res.email, name: res.username});
+          toastr.success("success! please sign in");
           this.setState({signState: 'signIn'});
         } else {
-          //todo show toastr
+          toastr.error(res.message);
         }
       });
   }

@@ -4,8 +4,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as messageActions from '../../actions/messageActions';
 import * as languageActions from '../../actions/languageActions';
-import Dialogue from './MessageList';
+import MessageList from './MessageList';
 import LanguageBox from './LanguageBox';
+import InputPanel from "./InputPanel";
 import Panel from './Panel';
 import socket from '../../socket/socket';
 import messageApi from "../../api/messageApi";
@@ -20,7 +21,6 @@ class HomePage extends React.Component {
       message: '',
       sending: false,
       showLanguagePanel: false,
-      language: props.language.language,
       chattingWith: null
     };
 
@@ -106,10 +106,6 @@ class HomePage extends React.Component {
   }
 
   render() {
-    const languageList = this.props.language.languages;
-    const languageLabel = languageList.find(value =>
-      value.code === this.state.language).language;
-
     return (
       <div className="main">
         <div className="mainInner">
@@ -127,45 +123,14 @@ class HomePage extends React.Component {
                          style={{marginBottom: "0", marginRight: "0", height: "100%"}}
                          ref={this.getRef}
                     >
-                      <Dialogue newMessage={this.state.message}
-                                sending={this.state.sending}
-                                chattingWith={this.state.chattingWith}
-                                scrollDown={this.scrollDown}
+                      <MessageList newMessage={this.state.message}
+                                   sending={this.state.sending}
+                                   chattingWith={this.state.chattingWith}
+                                   scrollDown={this.scrollDown}
                       />
                     </div>
                   </div>
-                  <div className="boxFt">
-                    <div className="toolBar">
-                      <div role="button" className="btn languageBtn" onClick={() => {
-                        this.setState({showLanguagePanel: true})
-                      }}>{languageLabel}</div>
-                      {this.state.showLanguagePanel ? (
-                        <div>
-                          <div className="clickBoard" onClick={this.removeLanguagePanel}/>
-                          <div className="boxDecorator arrowShadow"/>
-                          <div className="boxDecorator arrow"/>
-                          <LanguageBox removeLanguagePanel={this.removeLanguagePanel}/>
-                        </div>) : null}
-                    </div>
-                    <div className="content">
-                      <form style={{padding: 0}}>
-                    <textarea autoComplete="off"
-                              autoFocus="off"
-                              id="textArea"
-                              className="flex"
-                              autoCorrect="off"
-                              onChange={this.editMessage}
-                              onKeyDown={this.checkEnter}
-                              ref={(textarea) => {
-                                this.textarea = textarea
-                              }}
-                    />
-                      </form>
-                    </div>
-                    <div className="action">
-                      <a className="btn btnSend" onClick={this.sendMessage}>Send</a>
-                    </div>
-                  </div>
+                  <InputPanel userInfo={this.props.userInfo} chattingWith={this.state.chattingWith}/>
                 </div>
                 :
                 <div className="chatArea box chat">
